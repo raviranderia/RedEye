@@ -7,21 +7,56 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D0543F71DD7B9CF00AABC33 /* StudentAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0543F61DD7B9CF00AABC33 /* StudentAddress.swift */; };
+		7D0543F91DD7FA6D00AABC33 /* SwitchLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0543F81DD7FA6D00AABC33 /* SwitchLoginViewController.swift */; };
+		7D154E0D1DD805F200A6AA45 /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D154E0C1DD805F200A6AA45 /* SignUpController.swift */; };
+		7D4BBAC31DB5CF7D00571C6A /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4BBAC21DB5CF7D00571C6A /* ProfileController.swift */; };
+		7D4BBAC51DB6462000571C6A /* ScheduleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4BBAC41DB6462000571C6A /* ScheduleController.swift */; };
+		7D4BBAC71DB67C5E00571C6A /* StudentsListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4BBAC61DB67C5E00571C6A /* StudentsListController.swift */; };
+		7D9541A81DD8028000489BFE /* NortheasternLogo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7D9541A71DD8028000489BFE /* NortheasternLogo.jpg */; };
+		7D9E9F9B1DD8178A00306088 /* TextField transparent.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9E9F9A1DD8178A00306088 /* TextField transparent.png */; };
+		7D9E9F9F1DD819E700306088 /* Email icon.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7D9E9F9E1DD819E700306088 /* Email icon.jpg */; };
+		7D9E9FA31DD81CBF00306088 /* CustomUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9E9FA21DD81CBF00306088 /* CustomUI.swift */; };
+		7D9E9FA51DD8254600306088 /* Login Btn.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7D9E9FA41DD8254600306088 /* Login Btn.jpg */; };
+		7DA0EB5E1DB5BA87008BAEF8 /* Contants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA0EB5D1DB5BA87008BAEF8 /* Contants.swift */; };
 		7DF7DE3C1DB59CC00083AC91 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF7DE3B1DB59CC00083AC91 /* AppDelegate.swift */; };
-		7DF7DE3E1DB59CC00083AC91 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF7DE3D1DB59CC00083AC91 /* ViewController.swift */; };
+		7DF7DE3E1DB59CC00083AC91 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF7DE3D1DB59CC00083AC91 /* LoginController.swift */; };
 		7DF7DE411DB59CC00083AC91 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DF7DE3F1DB59CC00083AC91 /* Main.storyboard */; };
 		7DF7DE431DB59CC00083AC91 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DF7DE421DB59CC00083AC91 /* Assets.xcassets */; };
 		7DF7DE461DB59CC00083AC91 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DF7DE441DB59CC00083AC91 /* LaunchScreen.storyboard */; };
+		7DF7DE511DB59D3D0083AC91 /* Student.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF7DE501DB59D3D0083AC91 /* Student.swift */; };
+		7DF7DE531DB59F270083AC91 /* Shuttle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF7DE521DB59F270083AC91 /* Shuttle.swift */; };
+		7DF7DE551DB5A8CE0083AC91 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DF7DE541DB5A8CE0083AC91 /* GoogleService-Info.plist */; };
+		F7AADE9C951E673F7D0A073A /* Pods_RedEye.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8C6C291546492F99357A8C /* Pods_RedEye.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		62BAA6325116425D4047DC01 /* Pods-RedEye.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RedEye.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RedEye/Pods-RedEye.debug.xcconfig"; sourceTree = "<group>"; };
+		7D0543F61DD7B9CF00AABC33 /* StudentAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StudentAddress.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/StudentAddress.swift; sourceTree = "<group>"; };
+		7D0543F81DD7FA6D00AABC33 /* SwitchLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwitchLoginViewController.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/SwitchLoginViewController.swift; sourceTree = "<group>"; };
+		7D154E0C1DD805F200A6AA45 /* SignUpController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SignUpController.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/SignUpController.swift; sourceTree = "<group>"; };
+		7D4BBAC21DB5CF7D00571C6A /* ProfileController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileController.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/ProfileController.swift; sourceTree = "<group>"; };
+		7D4BBAC41DB6462000571C6A /* ScheduleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScheduleController.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/ScheduleController.swift; sourceTree = "<group>"; };
+		7D4BBAC61DB67C5E00571C6A /* StudentsListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StudentsListController.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/StudentsListController.swift; sourceTree = "<group>"; };
+		7D9541A71DD8028000489BFE /* NortheasternLogo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = NortheasternLogo.jpg; path = ../../../../../marie.Fonkou/Desktop/NortheasternLogo.jpg; sourceTree = "<group>"; };
+		7D9E9F9A1DD8178A00306088 /* TextField transparent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TextField transparent.png"; path = "../../../../../marie.Fonkou/Documents/Sketch/TextField transparent.png"; sourceTree = "<group>"; };
+		7D9E9F9E1DD819E700306088 /* Email icon.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "Email icon.jpg"; path = "../../../../../marie.Fonkou/Documents/Sketch/Email icon.jpg"; sourceTree = "<group>"; };
+		7D9E9FA21DD81CBF00306088 /* CustomUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomUI.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/CustomUI.swift; sourceTree = "<group>"; };
+		7D9E9FA41DD8254600306088 /* Login Btn.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "Login Btn.jpg"; path = "../../../../../marie.Fonkou/Documents/Sketch/Login Btn.jpg"; sourceTree = "<group>"; };
+		7DA0EB5D1DB5BA87008BAEF8 /* Contants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Contants.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/Contants.swift; sourceTree = "<group>"; };
+		7DA0EB5F1DB5C99E008BAEF8 /* RedEye.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RedEye.entitlements; sourceTree = "<group>"; };
 		7DF7DE381DB59CC00083AC91 /* RedEye.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RedEye.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DF7DE3B1DB59CC00083AC91 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		7DF7DE3D1DB59CC00083AC91 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		7DF7DE3D1DB59CC00083AC91 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		7DF7DE401DB59CC00083AC91 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7DF7DE421DB59CC00083AC91 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7DF7DE451DB59CC00083AC91 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7DF7DE471DB59CC00083AC91 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7DF7DE501DB59D3D0083AC91 /* Student.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Student.swift; sourceTree = "<group>"; };
+		7DF7DE521DB59F270083AC91 /* Shuttle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shuttle.swift; sourceTree = "<group>"; };
+		7DF7DE541DB5A8CE0083AC91 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		CE8C6C291546492F99357A8C /* Pods_RedEye.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RedEye.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E0FA5B66249EA6AECD30E35E /* Pods-RedEye.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RedEye.release.xcconfig"; path = "Pods/Target Support Files/Pods-RedEye/Pods-RedEye.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,17 +64,53 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7AADE9C951E673F7D0A073A /* Pods_RedEye.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		21B95A4D452B15C4FB715C4A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				62BAA6325116425D4047DC01 /* Pods-RedEye.debug.xcconfig */,
+				E0FA5B66249EA6AECD30E35E /* Pods-RedEye.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		7D0543F51DD7B87600AABC33 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7D9E9FA11DD81CA600306088 /* Design */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		7D9E9FA11DD81CA600306088 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				7D9E9FA21DD81CBF00306088 /* CustomUI.swift */,
+			);
+			name = Design;
+			sourceTree = "<group>";
+		};
+		7DA0EB5C1DB5BA70008BAEF8 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				7DA0EB5D1DB5BA87008BAEF8 /* Contants.swift */,
+			);
+			name = Util;
+			sourceTree = "<group>";
+		};
 		7DF7DE2F1DB59CC00083AC91 = {
 			isa = PBXGroup;
 			children = (
 				7DF7DE3A1DB59CC00083AC91 /* RedEye */,
 				7DF7DE391DB59CC00083AC91 /* Products */,
+				21B95A4D452B15C4FB715C4A /* Pods */,
+				C34FC9E0902176E7775239B4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -54,14 +125,54 @@
 		7DF7DE3A1DB59CC00083AC91 /* RedEye */ = {
 			isa = PBXGroup;
 			children = (
+				7DA0EB5F1DB5C99E008BAEF8 /* RedEye.entitlements */,
+				7D0543F51DD7B87600AABC33 /* View */,
+				7DA0EB5C1DB5BA70008BAEF8 /* Util */,
+				7DF7DE4F1DB59D260083AC91 /* Controller */,
+				7DF7DE4D1DB59D090083AC91 /* Model */,
 				7DF7DE3B1DB59CC00083AC91 /* AppDelegate.swift */,
-				7DF7DE3D1DB59CC00083AC91 /* ViewController.swift */,
 				7DF7DE3F1DB59CC00083AC91 /* Main.storyboard */,
 				7DF7DE421DB59CC00083AC91 /* Assets.xcassets */,
+				7D9541A71DD8028000489BFE /* NortheasternLogo.jpg */,
+				7D9E9F9A1DD8178A00306088 /* TextField transparent.png */,
+				7D9E9F9E1DD819E700306088 /* Email icon.jpg */,
+				7D9E9FA41DD8254600306088 /* Login Btn.jpg */,
 				7DF7DE441DB59CC00083AC91 /* LaunchScreen.storyboard */,
 				7DF7DE471DB59CC00083AC91 /* Info.plist */,
+				7DF7DE541DB5A8CE0083AC91 /* GoogleService-Info.plist */,
 			);
 			path = RedEye;
+			sourceTree = "<group>";
+		};
+		7DF7DE4D1DB59D090083AC91 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7DF7DE501DB59D3D0083AC91 /* Student.swift */,
+				7DF7DE521DB59F270083AC91 /* Shuttle.swift */,
+				7D0543F61DD7B9CF00AABC33 /* StudentAddress.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		7DF7DE4F1DB59D260083AC91 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				7DF7DE3D1DB59CC00083AC91 /* LoginController.swift */,
+				7D4BBAC21DB5CF7D00571C6A /* ProfileController.swift */,
+				7D4BBAC41DB6462000571C6A /* ScheduleController.swift */,
+				7D4BBAC61DB67C5E00571C6A /* StudentsListController.swift */,
+				7D0543F81DD7FA6D00AABC33 /* SwitchLoginViewController.swift */,
+				7D154E0C1DD805F200A6AA45 /* SignUpController.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		C34FC9E0902176E7775239B4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CE8C6C291546492F99357A8C /* Pods_RedEye.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -71,9 +182,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7DF7DE4A1DB59CC00083AC91 /* Build configuration list for PBXNativeTarget "RedEye" */;
 			buildPhases = (
+				AF566BA703563F4F49E892CE /* [CP] Check Pods Manifest.lock */,
 				7DF7DE341DB59CC00083AC91 /* Sources */,
 				7DF7DE351DB59CC00083AC91 /* Frameworks */,
 				7DF7DE361DB59CC00083AC91 /* Resources */,
+				58D104D4B46C721DCF203853 /* [CP] Embed Pods Frameworks */,
+				2022C0A9AC629CB087790CD5 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -97,7 +211,13 @@
 					7DF7DE371DB59CC00083AC91 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = X554HSC799;
+						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -124,20 +244,83 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D9E9F9F1DD819E700306088 /* Email icon.jpg in Resources */,
+				7D9E9FA51DD8254600306088 /* Login Btn.jpg in Resources */,
 				7DF7DE461DB59CC00083AC91 /* LaunchScreen.storyboard in Resources */,
+				7D9541A81DD8028000489BFE /* NortheasternLogo.jpg in Resources */,
 				7DF7DE431DB59CC00083AC91 /* Assets.xcassets in Resources */,
+				7D9E9F9B1DD8178A00306088 /* TextField transparent.png in Resources */,
 				7DF7DE411DB59CC00083AC91 /* Main.storyboard in Resources */,
+				7DF7DE551DB5A8CE0083AC91 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2022C0A9AC629CB087790CD5 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RedEye/Pods-RedEye-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		58D104D4B46C721DCF203853 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RedEye/Pods-RedEye-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AF566BA703563F4F49E892CE /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7DF7DE341DB59CC00083AC91 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7DF7DE3E1DB59CC00083AC91 /* ViewController.swift in Sources */,
+				7D0543F71DD7B9CF00AABC33 /* StudentAddress.swift in Sources */,
+				7D4BBAC31DB5CF7D00571C6A /* ProfileController.swift in Sources */,
+				7D4BBAC71DB67C5E00571C6A /* StudentsListController.swift in Sources */,
+				7D9E9FA31DD81CBF00306088 /* CustomUI.swift in Sources */,
+				7DF7DE3E1DB59CC00083AC91 /* LoginController.swift in Sources */,
+				7DF7DE531DB59F270083AC91 /* Shuttle.swift in Sources */,
+				7DA0EB5E1DB5BA87008BAEF8 /* Contants.swift in Sources */,
+				7D0543F91DD7FA6D00AABC33 /* SwitchLoginViewController.swift in Sources */,
+				7D4BBAC51DB6462000571C6A /* ScheduleController.swift in Sources */,
+				7DF7DE511DB59D3D0083AC91 /* Student.swift in Sources */,
+				7D154E0D1DD805F200A6AA45 /* SignUpController.swift in Sources */,
 				7DF7DE3C1DB59CC00083AC91 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -182,6 +365,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -232,6 +416,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -259,8 +444,10 @@
 		};
 		7DF7DE4B1DB59CC00083AC91 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 62BAA6325116425D4047DC01 /* Pods-RedEye.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = RedEye/RedEye.entitlements;
 				DEVELOPMENT_TEAM = X554HSC799;
 				INFOPLIST_FILE = RedEye/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -272,8 +459,10 @@
 		};
 		7DF7DE4C1DB59CC00083AC91 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E0FA5B66249EA6AECD30E35E /* Pods-RedEye.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = RedEye/RedEye.entitlements;
 				DEVELOPMENT_TEAM = X554HSC799;
 				INFOPLIST_FILE = RedEye/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -302,6 +491,7 @@
 				7DF7DE4C1DB59CC00083AC91 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
