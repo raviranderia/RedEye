@@ -9,10 +9,20 @@
 import UIKit
 
 class StudentCell: UITableViewCell {
+    
+    
+    @IBOutlet weak var studentFirstName: UILabel!
 
+    @IBOutlet weak var studentLastName: UILabel!
+    
+    @IBOutlet weak var studentMajor: UILabel!
+    
+    @IBOutlet weak var studentProfilePicture: UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        studentProfilePicture.layer.cornerRadius = studentProfilePicture.frame.size.height/2
+        studentProfilePicture.layer.masksToBounds = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

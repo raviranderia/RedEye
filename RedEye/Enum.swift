@@ -7,3 +7,14 @@
 //
 
 import Foundation
+
+enum Major: String{
+    case Accountig = "Accountig"
+    case AccountingCPS = "Accounting - CPS"
+    case AfricanStudies = "African Studies"
+    case AfricanAmericanStudies = "African-American Studies"
+    case AirForceROTC = "Air Force ROTC"
+    case AmericanSignLanguage = "American Sign Language"
+
+    
+}

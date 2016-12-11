@@ -42,21 +42,7 @@ class SwitchLoginViewController: UIViewController {
             })
         }
     }
-    
-//    @IBAction func switchViews(_ sender: UISegmentedControl) {
-//
-//        if sender.selectedSegmentIndex == 0 {
-//            UIView.animate(withDuration: 0.5, animations: {
-//                self.LoginView.alpha = 1
-//                self.SignUpView.alpha = 0
-//            })
-//        } else {
-//            UIView.animate(withDuration: 0.5, animations: {
-//                self.LoginView.alpha = 0
-//                self.SignUpView.alpha = 1
-//            })
-//        }
-//    }
+
 
     /*
     // MARK: - Navigation

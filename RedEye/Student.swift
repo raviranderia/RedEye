@@ -10,13 +10,12 @@ import UIKit
 
 class Student: NSObject {
     
-    let studentId: Int? = nil
-    let studentFirstName: String? = nil
-    let studentLastName: String? = nil
-    let password : String? = nil
-    let adress: String? = nil
-    let studentProfilePicture: String? = nil
-    let studentMajor: String? = nil
+    //var studentId: Int?
+    var studentFirstName: String?
+    var studentLastName: String?
+    var adress: String?
+    var studentProfilePicture: String?
+    var studentMajor: String?
     
 
 }

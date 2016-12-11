@@ -7,45 +7,100 @@
 //
 
 import UIKit
+import Firebase
 
-class StudentsListController: UITableViewController {
+class StudentsListController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    
+    
+    @IBOutlet weak var studentTableView: UITableView!
+    
+    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+    
+    var students = [Student]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+               self.view.backgroundColor = UIColor.black
+        studentTableView.delegate = self
+        studentTableView.dataSource = self
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
+        self.navigationController?.navigationBar.topItem?.title = "students"
+        self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Georgia", size: 34)!, NSForegroundColorAttributeName: Constants.Colors.redColor]
+        
+ 
+        activityIndicator.center = self.view.center
+        
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.whiteLarge
+        view.addSubview(activityIndicator)
+        self.studentTableView.isHidden=true
+          activityIndicator.startAnimating()
+        
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        
+        fetchStudents()
     }
+    
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func fetchStudents(){
+        FIRDatabase.database().reference().child("Students").observe(.childAdded, with: { (snapshot) in
+            
+            if let dictionary = snapshot.value as? [String : AnyObject] {
+                let student = Student()
+                student.studentFirstName = dictionary["firstName"] as? String
+                student.studentLastName = dictionary["lastName"]  as? String
+                student.studentMajor = dictionary["studentMajor"]  as? String
+                student.studentProfilePicture = dictionary["profilePictureUrl"] as? String
+                self.students.append(student)
+                
+                DispatchQueue.main.async{
+                
+                    self.studentTableView.reloadData()
+                }
+                
+            }
+            print(snapshot)
+        } , withCancel: nil)
+        
+        
+    }
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+   func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return students.count
     }
 
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "studentCell", for: indexPath) as! StudentCell
 
-        // Configure the cell...
-
+        let student = students[indexPath.row]
+        cell.studentFirstName?.text = student.studentFirstName
+        cell.studentLastName?.text = student.studentLastName
+        cell.studentMajor?.text = student.studentMajor
+        
+        if let profilePictureUrL = student.studentProfilePicture {
+            
+            cell.studentProfilePicture.loadImageWithCache(urlString: profilePictureUrL)
+            self.activityIndicator.stopAnimating()
+            self.studentTableView.isHidden=false
+        }
+        
         return cell
     }
-    */
+ 
 
     /*
     // Override to support conditional editing of the table view.

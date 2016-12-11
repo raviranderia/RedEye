@@ -8,6 +8,8 @@
 
 import UIKit
 import Firebase
+import GoogleMaps
+import GooglePlaces
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,8 +18,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
         FIRApp.configure()
-        // Override point for customization after application launch.
+        GMSServices.provideAPIKey("AIzaSyBpXjkner86YxwH05lCV4jNYOuM4vmEgeE")
+        //AIzaSyAzZ-6XtvzIhNANKJq5NEH6XEFUUDoNGrg
+        GMSPlacesClient.provideAPIKey("AIzaSyBpXjkner86YxwH05lCV4jNYOuM4vmEgeE")
+        
+        UINavigationBar.appearance().barTintColor = UIColor(red: 0/155.0, green: 0/155.0, blue: 0/155.0, alpha: 100)
+        
+        
+       //UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Constants.Colors.redColor]
         return true
     }
 

@@ -10,15 +10,21 @@
 		7D0543F71DD7B9CF00AABC33 /* StudentAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0543F61DD7B9CF00AABC33 /* StudentAddress.swift */; };
 		7D0543F91DD7FA6D00AABC33 /* SwitchLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0543F81DD7FA6D00AABC33 /* SwitchLoginViewController.swift */; };
 		7D154E0D1DD805F200A6AA45 /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D154E0C1DD805F200A6AA45 /* SignUpController.swift */; };
+		7D15B51E1DDE0F370082C1AD /* ScheduleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15B51D1DDE0F370082C1AD /* ScheduleCell.swift */; };
 		7D4BBAC31DB5CF7D00571C6A /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4BBAC21DB5CF7D00571C6A /* ProfileController.swift */; };
 		7D4BBAC51DB6462000571C6A /* ScheduleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4BBAC41DB6462000571C6A /* ScheduleController.swift */; };
 		7D4BBAC71DB67C5E00571C6A /* StudentsListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4BBAC61DB67C5E00571C6A /* StudentsListController.swift */; };
+		7D55CF291DF49995007DE621 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D55CF281DF49995007DE621 /* Reservation.swift */; };
+		7D55D87D1DE7E927005D84B5 /* Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D55D87C1DE7E927005D84B5 /* Schedule.swift */; };
+		7D55D87F1DE7EA0A005D84B5 /* Driver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D55D87E1DE7EA0A005D84B5 /* Driver.swift */; };
+		7D6E284F1DDA99620094A024 /* UserInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E284E1DDA99620094A024 /* UserInterface.swift */; };
+		7D83656B1DDAB8AA00D64E1A /* Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D83656A1DDAB8AA00D64E1A /* Enum.swift */; };
+		7D8B81DD1DDE1B8200C47D78 /* StudentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8B81DC1DDE1B8200C47D78 /* StudentCell.swift */; };
 		7D9541A81DD8028000489BFE /* NortheasternLogo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7D9541A71DD8028000489BFE /* NortheasternLogo.jpg */; };
-		7D9E9F9B1DD8178A00306088 /* TextField transparent.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9E9F9A1DD8178A00306088 /* TextField transparent.png */; };
-		7D9E9F9F1DD819E700306088 /* Email icon.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7D9E9F9E1DD819E700306088 /* Email icon.jpg */; };
 		7D9E9FA31DD81CBF00306088 /* CustomUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9E9FA21DD81CBF00306088 /* CustomUI.swift */; };
-		7D9E9FA51DD8254600306088 /* Login Btn.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7D9E9FA41DD8254600306088 /* Login Btn.jpg */; };
 		7DA0EB5E1DB5BA87008BAEF8 /* Contants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA0EB5D1DB5BA87008BAEF8 /* Contants.swift */; };
+		7DC72F961DDE3CB900326B00 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC72F951DDE3CB900326B00 /* Extensions.swift */; };
+		7DC7B3951DE750260065B91F /* ItineraryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC7B3941DE750260065B91F /* ItineraryController.swift */; };
 		7DF7DE3C1DB59CC00083AC91 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF7DE3B1DB59CC00083AC91 /* AppDelegate.swift */; };
 		7DF7DE3E1DB59CC00083AC91 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF7DE3D1DB59CC00083AC91 /* LoginController.swift */; };
 		7DF7DE411DB59CC00083AC91 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DF7DE3F1DB59CC00083AC91 /* Main.storyboard */; };
@@ -35,16 +41,22 @@
 		7D0543F61DD7B9CF00AABC33 /* StudentAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StudentAddress.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/StudentAddress.swift; sourceTree = "<group>"; };
 		7D0543F81DD7FA6D00AABC33 /* SwitchLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwitchLoginViewController.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/SwitchLoginViewController.swift; sourceTree = "<group>"; };
 		7D154E0C1DD805F200A6AA45 /* SignUpController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SignUpController.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/SignUpController.swift; sourceTree = "<group>"; };
+		7D15B51D1DDE0F370082C1AD /* ScheduleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScheduleCell.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/ScheduleCell.swift; sourceTree = "<group>"; };
 		7D4BBAC21DB5CF7D00571C6A /* ProfileController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileController.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/ProfileController.swift; sourceTree = "<group>"; };
 		7D4BBAC41DB6462000571C6A /* ScheduleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScheduleController.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/ScheduleController.swift; sourceTree = "<group>"; };
 		7D4BBAC61DB67C5E00571C6A /* StudentsListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StudentsListController.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/StudentsListController.swift; sourceTree = "<group>"; };
+		7D55CF281DF49995007DE621 /* Reservation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reservation.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/Reservation.swift; sourceTree = "<group>"; };
+		7D55D87C1DE7E927005D84B5 /* Schedule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Schedule.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/Schedule.swift; sourceTree = "<group>"; };
+		7D55D87E1DE7EA0A005D84B5 /* Driver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Driver.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/Driver.swift; sourceTree = "<group>"; };
+		7D6E284E1DDA99620094A024 /* UserInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserInterface.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/UserInterface.swift; sourceTree = "<group>"; };
+		7D83656A1DDAB8AA00D64E1A /* Enum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Enum.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/Enum.swift; sourceTree = "<group>"; };
+		7D8B81DC1DDE1B8200C47D78 /* StudentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StudentCell.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/StudentCell.swift; sourceTree = "<group>"; };
 		7D9541A71DD8028000489BFE /* NortheasternLogo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = NortheasternLogo.jpg; path = ../../../../../marie.Fonkou/Desktop/NortheasternLogo.jpg; sourceTree = "<group>"; };
-		7D9E9F9A1DD8178A00306088 /* TextField transparent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TextField transparent.png"; path = "../../../../../marie.Fonkou/Documents/Sketch/TextField transparent.png"; sourceTree = "<group>"; };
-		7D9E9F9E1DD819E700306088 /* Email icon.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "Email icon.jpg"; path = "../../../../../marie.Fonkou/Documents/Sketch/Email icon.jpg"; sourceTree = "<group>"; };
 		7D9E9FA21DD81CBF00306088 /* CustomUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomUI.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/CustomUI.swift; sourceTree = "<group>"; };
-		7D9E9FA41DD8254600306088 /* Login Btn.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "Login Btn.jpg"; path = "../../../../../marie.Fonkou/Documents/Sketch/Login Btn.jpg"; sourceTree = "<group>"; };
 		7DA0EB5D1DB5BA87008BAEF8 /* Contants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Contants.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/Contants.swift; sourceTree = "<group>"; };
 		7DA0EB5F1DB5C99E008BAEF8 /* RedEye.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RedEye.entitlements; sourceTree = "<group>"; };
+		7DC72F951DDE3CB900326B00 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Extensions.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/Extensions.swift; sourceTree = "<group>"; };
+		7DC7B3941DE750260065B91F /* ItineraryController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItineraryController.swift; path = ../../../../../marie.Fonkou/Documents/Swift/RedEye/RedEye/ItineraryController.swift; sourceTree = "<group>"; };
 		7DF7DE381DB59CC00083AC91 /* RedEye.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RedEye.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DF7DE3B1DB59CC00083AC91 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7DF7DE3D1DB59CC00083AC91 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
@@ -83,9 +95,19 @@
 		7D0543F51DD7B87600AABC33 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				7D15B51C1DDE0F170082C1AD /* Custom Cell */,
 				7D9E9FA11DD81CA600306088 /* Design */,
 			);
 			name = View;
+			sourceTree = "<group>";
+		};
+		7D15B51C1DDE0F170082C1AD /* Custom Cell */ = {
+			isa = PBXGroup;
+			children = (
+				7D15B51D1DDE0F370082C1AD /* ScheduleCell.swift */,
+				7D8B81DC1DDE1B8200C47D78 /* StudentCell.swift */,
+			);
+			name = "Custom Cell";
 			sourceTree = "<group>";
 		};
 		7D9E9FA11DD81CA600306088 /* Design */ = {
@@ -100,8 +122,18 @@
 			isa = PBXGroup;
 			children = (
 				7DA0EB5D1DB5BA87008BAEF8 /* Contants.swift */,
+				7D6E284E1DDA99620094A024 /* UserInterface.swift */,
+				7D83656A1DDAB8AA00D64E1A /* Enum.swift */,
 			);
 			name = Util;
+			sourceTree = "<group>";
+		};
+		7DC72F941DDE3C9A00326B00 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7DC72F951DDE3CB900326B00 /* Extensions.swift */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		7DF7DE2F1DB59CC00083AC91 = {
@@ -126,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				7DA0EB5F1DB5C99E008BAEF8 /* RedEye.entitlements */,
+				7DC72F941DDE3C9A00326B00 /* Supporting Files */,
 				7D0543F51DD7B87600AABC33 /* View */,
 				7DA0EB5C1DB5BA70008BAEF8 /* Util */,
 				7DF7DE4F1DB59D260083AC91 /* Controller */,
@@ -134,9 +167,6 @@
 				7DF7DE3F1DB59CC00083AC91 /* Main.storyboard */,
 				7DF7DE421DB59CC00083AC91 /* Assets.xcassets */,
 				7D9541A71DD8028000489BFE /* NortheasternLogo.jpg */,
-				7D9E9F9A1DD8178A00306088 /* TextField transparent.png */,
-				7D9E9F9E1DD819E700306088 /* Email icon.jpg */,
-				7D9E9FA41DD8254600306088 /* Login Btn.jpg */,
 				7DF7DE441DB59CC00083AC91 /* LaunchScreen.storyboard */,
 				7DF7DE471DB59CC00083AC91 /* Info.plist */,
 				7DF7DE541DB5A8CE0083AC91 /* GoogleService-Info.plist */,
@@ -150,6 +180,9 @@
 				7DF7DE501DB59D3D0083AC91 /* Student.swift */,
 				7DF7DE521DB59F270083AC91 /* Shuttle.swift */,
 				7D0543F61DD7B9CF00AABC33 /* StudentAddress.swift */,
+				7D55D87C1DE7E927005D84B5 /* Schedule.swift */,
+				7D55D87E1DE7EA0A005D84B5 /* Driver.swift */,
+				7D55CF281DF49995007DE621 /* Reservation.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -163,6 +196,7 @@
 				7D4BBAC61DB67C5E00571C6A /* StudentsListController.swift */,
 				7D0543F81DD7FA6D00AABC33 /* SwitchLoginViewController.swift */,
 				7D154E0C1DD805F200A6AA45 /* SignUpController.swift */,
+				7DC7B3941DE750260065B91F /* ItineraryController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -244,12 +278,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7D9E9F9F1DD819E700306088 /* Email icon.jpg in Resources */,
-				7D9E9FA51DD8254600306088 /* Login Btn.jpg in Resources */,
 				7DF7DE461DB59CC00083AC91 /* LaunchScreen.storyboard in Resources */,
 				7D9541A81DD8028000489BFE /* NortheasternLogo.jpg in Resources */,
 				7DF7DE431DB59CC00083AC91 /* Assets.xcassets in Resources */,
-				7D9E9F9B1DD8178A00306088 /* TextField transparent.png in Resources */,
 				7DF7DE411DB59CC00083AC91 /* Main.storyboard in Resources */,
 				7DF7DE551DB5A8CE0083AC91 /* GoogleService-Info.plist in Resources */,
 			);
@@ -300,7 +331,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -313,13 +344,22 @@
 				7D0543F71DD7B9CF00AABC33 /* StudentAddress.swift in Sources */,
 				7D4BBAC31DB5CF7D00571C6A /* ProfileController.swift in Sources */,
 				7D4BBAC71DB67C5E00571C6A /* StudentsListController.swift in Sources */,
+				7D8B81DD1DDE1B8200C47D78 /* StudentCell.swift in Sources */,
 				7D9E9FA31DD81CBF00306088 /* CustomUI.swift in Sources */,
+				7D55CF291DF49995007DE621 /* Reservation.swift in Sources */,
+				7D15B51E1DDE0F370082C1AD /* ScheduleCell.swift in Sources */,
+				7D83656B1DDAB8AA00D64E1A /* Enum.swift in Sources */,
+				7DC7B3951DE750260065B91F /* ItineraryController.swift in Sources */,
 				7DF7DE3E1DB59CC00083AC91 /* LoginController.swift in Sources */,
 				7DF7DE531DB59F270083AC91 /* Shuttle.swift in Sources */,
+				7D6E284F1DDA99620094A024 /* UserInterface.swift in Sources */,
 				7DA0EB5E1DB5BA87008BAEF8 /* Contants.swift in Sources */,
 				7D0543F91DD7FA6D00AABC33 /* SwitchLoginViewController.swift in Sources */,
 				7D4BBAC51DB6462000571C6A /* ScheduleController.swift in Sources */,
 				7DF7DE511DB59D3D0083AC91 /* Student.swift in Sources */,
+				7D55D87F1DE7EA0A005D84B5 /* Driver.swift in Sources */,
+				7DC72F961DDE3CB900326B00 /* Extensions.swift in Sources */,
+				7D55D87D1DE7E927005D84B5 /* Schedule.swift in Sources */,
 				7D154E0D1DD805F200A6AA45 /* SignUpController.swift in Sources */,
 				7DF7DE3C1DB59CC00083AC91 /* AppDelegate.swift in Sources */,
 			);

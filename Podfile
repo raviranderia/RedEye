@@ -11,5 +11,8 @@ target 'RedEye' do
   pod ‘Firebase/Database’
   pod ‘Firebase/Storage’
   pod 'SwiftKeychainWrapper'
+  pod 'GoogleMaps'
+  pod 'GooglePlaces'
+  pod ‘Alamofire’
 
 end

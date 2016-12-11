@@ -4,29 +4,35 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Alamofire.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-RedEye.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>1</integer>
 		</dict>
 		<key>SwiftKeychainWrapper.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>2</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>061E8D00DE832391033DB70004BDFF09</key>
+		<key>6ECED00AE152BEFA7ABA50E1698A15D7</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2713F090C7BACE447B0262CFFAC7E494</key>
+		<key>79C040AFDDCE1BCBF6D8B5EB0B85887F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>9ACC3712A1D5EC8E2FAD4A88D9276153</key>
 		<dict>
 			<key>primary</key>
 			<true/>

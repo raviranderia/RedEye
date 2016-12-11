@@ -35,6 +35,48 @@ class LoginButton: UIButton {
     
 }
 
+
+
+
+@IBDesignable
+class CheckEmailButton: UIButton {
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.backgroundColor = UIColor.white
+        self.layer.borderColor = UIColor.black.cgColor
+        self.layer.borderWidth = 2
+        self.layer.cornerRadius = 25
+    }
+    
+    
+}
+
+@IBDesignable
+class reserveSwitch: UISwitch {
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.onTintColor = Constants.Colors.redColor
+        self.tintColor = UIColor.black
+    }
+}
+
+
+@IBDesignable
+class profileTextField: UITextField {
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.backgroundColor = Constants.Colors.lightGrayColor.withAlphaComponent(0.5)
+        self.layer.cornerRadius = 25
+    }
+    
+    
+}
+
+
 @IBDesignable
 class SegmentedControl: UIControl{
     
@@ -146,7 +188,7 @@ class SegmentedControl: UIControl{
         let labelWidth = self.bounds.width / CGFloat(labels.count)
         
         for index in 0 ... labels.count - 1 {
-            var label = labels[index]
+            let label = labels[index]
             let xPosition = CGFloat(index) * labelWidth
             label.frame = CGRect(x:xPosition, y:0 , width:labelWidth, height:labelHeight)
         }

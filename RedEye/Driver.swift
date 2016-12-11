@@ -9,5 +9,10 @@
 import UIKit
 
 class Driver: NSObject {
+    
+    var driverFirstName: String?
+    var driverLastName: String?
+    var driverEmailAddress: String?
+    var driverProfilePicture: String?
 
 }

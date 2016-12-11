@@ -22,6 +22,8 @@ import SwiftKeychainWrapper
 class LoginController: UIViewController {
 
 
+    @IBOutlet var loginViewEffect: UIVisualEffectView!
+    
     
     @IBOutlet weak var redEyelabel: UILabel!
     
@@ -32,16 +34,97 @@ class LoginController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    @IBOutlet weak var usernameField: UITextField!
-    
+    @IBOutlet weak var emailField: UITextField!
+      
     
     @IBOutlet weak var passwordField: UITextField!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        hideKeyboardWhenTappedView()
         
+        FIRAuth.auth()?.addStateDidChangeListener { auth, user in
+            if user != nil {
+                self.performSegue(withIdentifier: "goToProfile", sender: nil)
+
+            } else {
+                
+            }
+        }
         
+//        if (FIRAuth.auth()?.currentUser?.uid) != nil{
+////            let profileController = ProfileController()
+////            present(profileController, animated:true, completion:nil)
+//            performSegue(withIdentifier: "goToProfile", sender: nil)
+//            
+//        }
+//        
+        
+    }
+    
+    @IBAction func loginBtnPressed(sender: AnyObject) {
+        
+        if self.emailField.text == "" || self.passwordField.text == "" {
+            
+            let alertControllerLogin = UIAlertController (title : "Oops, you were too fast", message: "Please make sure to fill in every field.", preferredStyle: .alert)
+            let actionSignUp = UIAlertAction (title: "OK", style: . cancel, handler : nil)
+            alertControllerLogin.addAction(actionSignUp)
+            self.present(alertControllerLogin, animated: true, completion: nil)
+        }else{
+            FIRAuth.auth()?.signIn(withEmail: self.emailField.text!, password: self.passwordField.text!, completion: {(user, error) in
+                if error == nil{
+                    if (user?.isEmailVerified)! {
+                        print("Email verified")
+                      self.performSegue(withIdentifier: "goToProfile", sender: nil)
+                        print ("Succefully logged in \(self.emailField.text)")
+                    }else{
+                        print("Email not verified")
+                        let alertControllerVerificationEmail = UIAlertController (title : "Verification required", message: "You need to verify your husky email address before logging in" , preferredStyle: .alert)
+                        let actionVerification = UIAlertAction (title: "OK", style: . cancel, handler : nil)
+                        alertControllerVerificationEmail.addAction(actionVerification)
+                        self.present(alertControllerVerificationEmail, animated: true, completion: nil)
+                    }
+                
+                } else if (error != nil){
+                    if let errCode = FIRAuthErrorCode(rawValue: (error?._code)!) {
+                        switch errCode {
+                        case .errorCodeInvalidEmail:
+                            let alertControllerSignUp = UIAlertController (title : "Oops", message: "The email address you provided is invalid." , preferredStyle: .alert)
+                            let actionSignUp = UIAlertAction (title: "OK", style: . cancel, handler : nil)
+                            alertControllerSignUp.addAction(actionSignUp)
+                            self.present(alertControllerSignUp, animated: true, completion: nil)
+                            break
+                        case .errorCodeWrongPassword:
+                            let alertControllerSignUp = UIAlertController (title : "Come on, you know this!", message: "The password you entered doesn't match the one we have in record." , preferredStyle: .alert)
+                            let actionSignUp = UIAlertAction (title: "OK", style: . cancel, handler : nil)
+                            alertControllerSignUp.addAction(actionSignUp)
+                            self.present(alertControllerSignUp, animated: true, completion: nil)
+                            break
+                        default:
+                            let alertControllerSignUp = UIAlertController (title : "Oops", message: "There's no record for \(self.emailField.text!) in our database. You might want to sign up first." , preferredStyle: .alert)
+                            let actionSignUp = UIAlertAction (title: "OK", style: . cancel, handler : nil)
+                            alertControllerSignUp.addAction(actionSignUp)
+                            self.present(alertControllerSignUp, animated: true, completion: nil)
+                        }
+                    }
+                    
+                }
+            })
+        }
+
+    }
+    
+    
+ 
+    
+    func hideKeyboardWhenTappedView (){
+        let tap = UITapGestureRecognizer(target: self, action:#selector(LoginController.hideKeyBoard))
+        tap.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tap)
+    }
+    
+    func hideKeyBoard(){
+        self.view.endEditing(true)
     }
     
     
@@ -52,42 +135,7 @@ class LoginController: UIViewController {
         //        }
     }
     
-    
-//    @IBAction func loginBtnPressed(_ sender: AnyObject) {
-//    
-//        
-//        if let username = usernameField.text, let password = passwordField.text {
-//            
-//            FIRAuth.auth()?.signIn(withEmail: username, password: password , completion: { (user, error) in
-//                if error == nil {
-//                    print ("SUCCESSFULLY LOGIN ALREADY EXISTING STUDENT")
-//                    if let user = user{
-//                        self.successfullyLogin(id: user.uid)
-//                        // self.performSegue(withIdentifier: "goToSchedule", sender: nil)
-//                        self.performSegue(withIdentifier: "goToProfile", sender: nil)
-//                    }
-//                    
-//                } else{
-//                    FIRAuth.auth()?.createUser(withEmail: username, password: password, completion: { (user, error) in
-//                        if error != nil{
-//                            // Alert
-//                        } else{
-//                            print ("SUCCESSFULLY LOGIN NEW STUDENT")
-//                            if let user = user{
-//                                self.successfullyLogin(id: user.uid)
-//                                 self.performSegue(withIdentifier: "goToProfile", sender: nil)
-//                                
-//
-//                            }
-//                            
-//                        }
-//                    })
-//                }
-//            })
-//        }
-//        
-//        
-//    }
+
 //    
 //    func successfullyLogin(id: String){
 //        let keychainResult = KeychainWrapper.standard.set(id, forKey: KEY_UID)
