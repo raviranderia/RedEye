@@ -63,16 +63,26 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
     }
  
     
+    @IBAction func signoutPressed(_ sender: UIButton) {
+        
+        if (FIRAuth.auth()?.currentUser?.uid) != nil{
+            
+            try? FIRAuth.auth()?.signOut()
+            var appDelegate: AppDelegate
+            appDelegate = UIApplication.shared.delegate as! AppDelegate
+            
+            appDelegate.window?.rootViewController
+                = self.storyboard?.instantiateViewController(withIdentifier: "switchVC")
+            
+            ////            let profileController = ProfileController()
+            ////            present(profileController, animated:true, completion:nil)
+            //            performSegue(withIdentifier: "goToProfile", sender: nil)
+            //
+        }
+    }
     @IBAction func logoutBtnPressed(_ sender: Any) {
         
-//        try! FIRAuth.auth()?.signOut()
-//        let loginController = LoginController()
-//        present(loginController, animated:true, completion:nil)
-        try! FIRAuth.auth()!.signOut()
-        if let storyboard = self.storyboard {
-            let vc = storyboard.instantiateViewController(withIdentifier: "LoginController") as! UINavigationController
-            self.present(vc, animated: false, completion: nil)
-        }
+       
     }
     
     var majors = ["Accountig", "Accounting - CPS", "African Studies", "African-American Studies", "Air Force ROTC", "American Sign Language"]

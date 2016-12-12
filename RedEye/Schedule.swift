@@ -10,6 +10,8 @@ import UIKit
 
 class Schedule: NSObject {
     
+    var id: String!
+    
     var shuttleDepartureDate: String!
     
     var shuttleID: String!
@@ -29,6 +31,8 @@ class Schedule: NSObject {
     var currentSeatAvalaible: String!
     
     var studentWhoReserved = [Student]()
+    
+    var currentReservations = Array<Any>()
     
     var reservations = [Reservation]()
     
@@ -95,8 +99,10 @@ class Schedule: NSObject {
         
     }
     
-    init (shuttleDepartureDate: String, shuttleID:String, driverID: String, shuttleDepartureTime:String, driverName: String, shuttleCapacity: String,
+    init (id: String, shuttleDepartureDate: String, shuttleID:String, driverID: String, shuttleDepartureTime:String, driverName: String, shuttleCapacity: String,
           shuttleLicencePlate: String){
+        
+        self.id = id
         self.shuttleDepartureDate = shuttleDepartureDate
         self.shuttleID = shuttleID
         self.driverID = driverID

@@ -13,7 +13,7 @@
         <!--Switch Login View Controller-->
         <scene sceneID="P5x-c8-3nx">
             <objects>
-                <viewController id="Q9I-13-NgG" customClass="SwitchLoginViewController" customModule="RedEye" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="switchVC" id="Q9I-13-NgG" customClass="SwitchLoginViewController" customModule="RedEye" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="JQr-xX-bmk"/>
                         <viewControllerLayoutGuide type="bottom" id="Rav-r9-FWP"/>
@@ -741,6 +741,7 @@ in the email and come back!</string>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Euy-m8-IGL">
                                             <rect key="frame" x="105" y="23" width="167" height="167"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8ij-t0-Y4E">
                                             <rect key="frame" x="76" y="221" width="223" height="21"/>
@@ -801,10 +802,10 @@ in the email and come back!</string>
                                 <rect key="frame" x="16" y="7" width="83" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Log out"/>
+                                <connections>
+                                    <action selector="signoutPressed:" destination="EJD-HK-n0z" eventType="touchUpInside" id="ID0-b7-XgH"/>
+                                </connections>
                             </button>
-                            <connections>
-                                <action selector="logoutBtnPressed:" destination="EJD-HK-n0z" id="HCz-3K-ZBZ"/>
-                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
@@ -825,7 +826,7 @@ in the email and come back!</string>
         <!--Tab Bar Controller-->
         <scene sceneID="O1y-zW-NsO">
             <objects>
-                <tabBarController id="9DA-0k-7qe" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="mainTabBarController" id="9DA-0k-7qe" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" id="loP-AU-mFR">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -847,7 +848,7 @@ in the email and come back!</string>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="zGk-9k-pxZ" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Profile" image="Profile icon 1" selectedImage="Profile icon 1" id="6cK-mO-YP0"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="rae-yG-81R">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="rae-yG-81R">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -866,7 +867,7 @@ in the email and come back!</string>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Fr3-xA-gTq" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item 2" image="Location icon" selectedImage="Location icon" id="IqQ-kG-hDE"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="4R4-Ob-YJO">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="4R4-Ob-YJO">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -885,7 +886,7 @@ in the email and come back!</string>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="lne-Vu-ikB" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="more" id="QwJ-nq-iLr"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="7ju-LX-MwK">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="7ju-LX-MwK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -903,7 +904,7 @@ in the email and come back!</string>
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="pyL-qG-aYU" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="XlM-t9-FYX">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="XlM-t9-FYX">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

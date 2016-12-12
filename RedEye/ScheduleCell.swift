@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import Firebase
 
 protocol ScheduleTableViewCellDelegate {
     func didTappedSwitch(cell: ScheduleCell)
@@ -17,6 +18,7 @@ class ScheduleCell: UITableViewCell {
     
     var schedule : Schedule!
     
+    let uid = FIRAuth.auth()?.currentUser?.uid
     @IBOutlet weak var driverProfilePicture: UIImageView!
     
     @IBOutlet weak var driverName: UILabel!
@@ -37,6 +39,7 @@ class ScheduleCell: UITableViewCell {
     
     @IBOutlet weak var reservationStatus: UILabel!
     
+    var isReserved = false
     
     @IBAction func reserveSwitchValueChanged(_ sender: Any) {
         delegate.didTappedSwitch(cell: self)
@@ -47,7 +50,23 @@ class ScheduleCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-
+    
+    override func prepareForReuse() {
+            self.reserveSwitch.isOn = false
+        
+        self.reservationStatus.text = "Switch button to reserve"
+        
+        
+    }
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
@@ -56,17 +75,22 @@ class ScheduleCell: UITableViewCell {
     
     func updateScheduleCell(_ schedule: Schedule){
         self.schedule = schedule
-        
+        isReserved = false
         shuttleDepartureDate.text = self.schedule.shuttleDepartureDate
         shuttleDepartureTime.text = self.schedule.shuttleDepartureTime
         driverName.text = self.schedule.driverName
         shuttleCapacity.text = self.schedule.shuttleCapacity
         shuttleLicencePlate.text = self.schedule.shuttleLicencePlate
       
-        
+    
         
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        
+    }
     func updateReservationStatusCell(_ schedule: Schedule){
         self.schedule = schedule
         

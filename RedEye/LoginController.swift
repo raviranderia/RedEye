@@ -43,21 +43,28 @@ class LoginController: UIViewController {
         super.viewDidLoad()
         hideKeyboardWhenTappedView()
         
-        FIRAuth.auth()?.addStateDidChangeListener { auth, user in
-            if user != nil {
-                self.performSegue(withIdentifier: "goToProfile", sender: nil)
-
-            } else {
+    //    FIRAuth.auth()?.addStateDidChangeListener { auth, user in
+        //    if user != nil {
+  //              self.performSegue(withIdentifier: "goToProfile", sender: nil)
+//
+           // } else {
                 
-            }
-        }
+          //  }
+        //}
         
-//        if (FIRAuth.auth()?.currentUser?.uid) != nil{
+        if (FIRAuth.auth()?.currentUser?.uid) != nil{
+            
+            var appDelegate: AppDelegate
+            appDelegate = UIApplication.shared.delegate as! AppDelegate
+            
+            appDelegate.window?.rootViewController
+                = self.storyboard?.instantiateViewController(withIdentifier: "mainTabBarController")
+            
 ////            let profileController = ProfileController()
 ////            present(profileController, animated:true, completion:nil)
 //            performSegue(withIdentifier: "goToProfile", sender: nil)
 //            
-//        }
+        }
 //        
         
     }
@@ -73,17 +80,17 @@ class LoginController: UIViewController {
         }else{
             FIRAuth.auth()?.signIn(withEmail: self.emailField.text!, password: self.passwordField.text!, completion: {(user, error) in
                 if error == nil{
-                    if (user?.isEmailVerified)! {
+                   // if (user?.isEmailVerified)! {
                         print("Email verified")
                       self.performSegue(withIdentifier: "goToProfile", sender: nil)
                         print ("Succefully logged in \(self.emailField.text)")
-                    }else{
-                        print("Email not verified")
-                        let alertControllerVerificationEmail = UIAlertController (title : "Verification required", message: "You need to verify your husky email address before logging in" , preferredStyle: .alert)
-                        let actionVerification = UIAlertAction (title: "OK", style: . cancel, handler : nil)
-                        alertControllerVerificationEmail.addAction(actionVerification)
-                        self.present(alertControllerVerificationEmail, animated: true, completion: nil)
-                    }
+//                    }else{
+//                        print("Email not verified")
+//                        let alertControllerVerificationEmail = UIAlertController (title : "Verification required", message: "You need to verify your husky email address before logging in" , preferredStyle: .alert)
+//                        let actionVerification = UIAlertAction (title: "OK", style: . cancel, handler : nil)
+//                        alertControllerVerificationEmail.addAction(actionVerification)
+//                        self.present(alertControllerVerificationEmail, animated: true, completion: nil)
+//                    }
                 
                 } else if (error != nil){
                     if let errCode = FIRAuthErrorCode(rawValue: (error?._code)!) {

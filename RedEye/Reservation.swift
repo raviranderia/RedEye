@@ -13,6 +13,7 @@ class Reservation: NSObject {
     var reservationTimeStamp: String!
     var reservationStatus: String!
     var studentUniqueId: String!
+    var scheduleId: String!
     
     var _reservationTimeStamp: String{
         if reservationTimeStamp == nil{
@@ -40,7 +41,8 @@ class Reservation: NSObject {
         
     }
     
-    init(reservationTimeStamp: String, reservationStatus: String, studentUniqueId: String) {
+    init(scheduleId: String, reservationTimeStamp: String, reservationStatus: String, studentUniqueId: String) {
+        self.scheduleId = scheduleId
         self.reservationTimeStamp = reservationTimeStamp
         self.reservationStatus = reservationStatus
         self.studentUniqueId = studentUniqueId

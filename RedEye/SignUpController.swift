@@ -73,7 +73,8 @@ class SignUpController: UIViewController {
                             }
                             let ref = FIRDatabase.database().reference(fromURL: Constants.URL.firebaseDatabase)
                             let studentReference = ref.child("Students").child(uid)
-                            let values = ["firstName": firstName, "lastName": lastName, "email": email]
+                            
+                            let values = ["firstName": firstName, "lastName": lastName, "email": email, "hasReservation":"NO"]
                             studentReference.updateChildValues(values, withCompletionBlock: { (errorDatabase, ref) in
                                 if errorDatabase != nil {
                                     print ("Error saving data in database: \(errorDatabase?.localizedDescription)")
