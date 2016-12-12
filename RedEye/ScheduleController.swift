@@ -286,7 +286,7 @@ class ScheduleController: UIViewController, UITableViewDelegate, UITableViewData
                 let hasReservation = userInfo?["hasReservation"] as? String
                 if hasReservation == "YES" {
                     
-                    print("you have reservation active already")
+                    self.reservationAlreadyMadeForAnotherShuttle()
                     DispatchQueue.main.async {
                         cell.reserveSwitch.isOn = false
                         
@@ -362,8 +362,11 @@ class ScheduleController: UIViewController, UITableViewDelegate, UITableViewData
             
             
         } else {
+            let timeStamp = self.getCurrentTimeStamp()
+            let reservationDictionary = ["studentId":uid, "reservationTimeStamp": timeStamp, "reservationStatus":"Cancelled", "scheduleID":schedule.id]
             
-            reservationReference.removeValue(completionBlock: { (error, ref) in
+             reservationReference.updateChildValues(reservationDictionary, withCompletionBlock: { (error, ref) in
+            //reservationReference.removeValue(completionBlock: { (error, ref) in
                 
                 if error != nil {
                     print("ERROR: \(error?.localizedDescription)")
@@ -425,85 +428,7 @@ class ScheduleController: UIViewController, UITableViewDelegate, UITableViewData
                 }
             })
         }
-//
-//        if activeReservationExistsForStudentForSelectedSchedule(scheduleIndexPath: (indexPath?.row)!) == true {
-//
-//            self.reservationAlreadyMadeForAnotherShuttle()
-//
-//        } else {
-//        cell.reserveSwitch.isOn = true
-//        var reservationNumber = 0
-//        //var numSeatReservation = 0
-//            
-//        let ref = FIRDatabase.database().reference(fromURL: Constants.URL.firebaseDatabase)
-//       
-//       // print(self.scheduleIds[(indexPath?.row)!])
-//        
-//        // Get numSeatReservation when switch is on for a schedule cell
-//        FIRDatabase.database().reference().child("Schedule").child(scheduleIds[(indexPath?.row)!]).observe(.childAdded, with: { (snapshot) in
-//
-//        if let dictionary = snapshot.value as? [String : AnyObject] {
-//                 if let numSeatReserved = dictionary["numSeatsReserved"] as? Int{
-//                   // print("actual numSeatReserved \(numSeatReserved)")
-//                 self.numSeatReservation = numSeatReserved
-//    }
-//    }
-//        } , withCancel: nil)
-//    
-//            numSeatReservation += 1
-//    
-//            //scheduleList[(indexPath?.row)!].reserved  = cell.reserveSwitch.isOn
-//            if (cell.reserveSwitch.isOn){
-//               // scheduleList[(indexPath?.row)!].reserved = true
-//                
-//                var reservationInformation = [String: String]()
-//                
-//                let reservationReference = ref.child("Schedule").child(scheduleIds[(indexPath?.row)!]).child("Reservations").child("\(uid)")
-//                
-//                let timeStamp = self.getCurrentTimeStamp()
-//                let reserved = "Reserved"
-//                schedule.reserved = true
-//                
-//                let values = ["studentId": uid, "reservationTimeStamp": timeStamp , "reservationStatus":
-//                    reserved]
-//                reservationReference.updateChildValues(values, withCompletionBlock: { (error, ref) in
-//                    if error != nil {
-//                        // print ("Error saving reservation in database: \(error?.localizedDescription)")
-//                        return
-//                    } else{
-//                        // print ("Successefully saved reservation \(values)")
-//                    }
-//
-//                reservationInformation["studentId"] = uid
-//                reservationInformation["reservationTimeStamp"] = timeStamp
-//                reservationInformation["reservationStatus"] = reserved
-//                    
-//                self.reservationList.append(reservationInformation as [String : AnyObject])
-//               // print("reservation List \(self.reservationList)")
-//                 //schedule.reservations[reservationNumber].reservationStatus = "Reserved"
-//                
-//                schedule.currentSeatAvalaible = "\(Int(self.scheduleList[(indexPath?.row)!].shuttleCapacity)! - self.numSeatReservation)"
-//                
-//                let reservationUpdate = ref.child("Schedule").child(self.scheduleIds[(indexPath?.row)!])
-//                    let valueSeat = ["numSeatsReserved": self.numSeatReservation, "numSeatsLeft": schedule.currentSeatAvalaible] as [String: Any]
-//                reservationUpdate.updateChildValues(valueSeat, withCompletionBlock: { (error, ref) in
-//                    if error != nil {
-//                        //print ("Error saving schedule update in database: \(error?.localizedDescription)")
-//                        return
-//                    } else{
-//                        //print ("Successefully updated schedule \(valueSeat)")
-//                    }
-//                })
-//                
-//                cell.updateReservationStatusCell(schedule)
-//                cell.updatedSchedule(schedule)
-//            
-//              self.activeReservationExistsForStudentForSelectedSchedule(scheduleIndexPath: (indexPath?.row)!) == true
-//              reservationNumber += 1
-//
-//                })
-//        }
-//        }
+
     }
     
     
@@ -526,48 +451,7 @@ class ScheduleController: UIViewController, UITableViewDelegate, UITableViewData
         self.present(alertController, animated: true, completion: nil)
 
     }
-    
-    func activeReservationExistsForStudentForSelectedSchedule(scheduleIndexPath indexPath: Int) -> Bool {
-        var reservationExists = false
-        FIRDatabase.database().reference().child("Schedule").child(scheduleIds[indexPath]).child("Reservations").child("\(uid)").observe(.value, with: { (snapshot) in
-            //print(snapshot.value)
-            if snapshot.exists() {
-               // print("Exists")
-                reservationExists = true
-            }
-        }, withCancel: nil)
-    
 
-        return reservationExists
-    }
-    
-//    func update(numResa : Int) -> Int{
-//        return numResa += 1
-//    }
-//
-//    func cancelReservation(scheduleIndexPath indexPath: Int){
-//        //FIRDatabase.database().reference().child("Schedule").child(scheduleIds[(indexPath?.row)!])
-//        //            print(snapshot.hasChild("Schedule/\(self.scheduleIds[(indexPath?.row)!])/Reservations/\(uid)"))
-//            schedule.reserved == false
-//            numSeatReservation -= 1
-//            schedule.currentSeatAvalaible = "\(Int(scheduleList[(indexPath?.row)!].shuttleCapacity)! + numSeatReservation)"
-//            scheduleList[(indexPath?.row)!].reserved = false
-//            self.reservation.reservationStatus = "Cancelled"
-//            cell.updateReservationStatusCell(schedule)
-//            let reservationUpdate = ref.child("Schedule").child(scheduleIds[(indexPath?.row)!])
-//            let valueSeat = ["numSeatsReserved": numSeatReservation, "numSeatsLeft": schedule.currentSeatAvalaible] as [String : Any]
-//            reservationUpdate.updateChildValues(valueSeat, withCompletionBlock: { (error, ref) in
-//                if error != nil {
-//                    print ("Error saving number seats in database: \(error?.localizedDescription)")
-//                    return
-//                } else{
-//                    print ("Successefully canceled reservation \(valueSeat)")
-//                }
-//            })
-//            cell.updatedSchedule(schedule)
-//            
-//            
-//        }
     }
     
   
