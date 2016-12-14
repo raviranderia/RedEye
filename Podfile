@@ -14,5 +14,5 @@ target 'RedEye' do
   pod 'GoogleMaps'
   pod 'GooglePlaces'
   pod ‘Alamofire’
-
+  pod 'SDWebImage', '~>3.8'
 end

@@ -29,7 +29,7 @@ class LoginButton: UIButton {
         super.layoutSubviews()
         
         self.backgroundColor = Constants.Colors.redColor
-        self.layer.cornerRadius = 25
+        self.layer.cornerRadius = frame.height / 2
     }
     
     

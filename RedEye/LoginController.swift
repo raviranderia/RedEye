@@ -42,15 +42,7 @@ class LoginController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         hideKeyboardWhenTappedView()
-        
-    //    FIRAuth.auth()?.addStateDidChangeListener { auth, user in
-        //    if user != nil {
-  //              self.performSegue(withIdentifier: "goToProfile", sender: nil)
-//
-           // } else {
-                
-          //  }
-        //}
+
         
         if (FIRAuth.auth()?.currentUser?.uid) != nil{
             
@@ -59,13 +51,10 @@ class LoginController: UIViewController {
             
             appDelegate.window?.rootViewController
                 = self.storyboard?.instantiateViewController(withIdentifier: "mainTabBarController")
+
             
-////            let profileController = ProfileController()
-////            present(profileController, animated:true, completion:nil)
-//            performSegue(withIdentifier: "goToProfile", sender: nil)
-//            
         }
-//        
+       
         
     }
     

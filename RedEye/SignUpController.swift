@@ -74,7 +74,7 @@ class SignUpController: UIViewController {
                             let ref = FIRDatabase.database().reference(fromURL: Constants.URL.firebaseDatabase)
                             let studentReference = ref.child("Students").child(uid)
                             
-                            let values = ["firstName": firstName, "lastName": lastName, "email": email, "hasReservation":"NO"]
+                            let values = ["firstName": firstName, "lastName": lastName, "email": email, "hasReservation":"NO", "studentMajor": "No major", "profilePictureUrl": "No profile picture"]
                             studentReference.updateChildValues(values, withCompletionBlock: { (errorDatabase, ref) in
                                 if errorDatabase != nil {
                                     print ("Error saving data in database: \(errorDatabase?.localizedDescription)")
@@ -85,6 +85,11 @@ class SignUpController: UIViewController {
                             })
 
                             self.animateIn()
+                            self.firstNameField.text = ""
+                            self.lastNameField.text = ""
+                            self.huskyEmailField.text = ""
+                            self.passwordField.text = ""
+                            
                         } else {
                             print ("Error sending email verification \(error?.localizedDescription)")
                         }
@@ -94,7 +99,7 @@ class SignUpController: UIViewController {
                     } else if let errCode = FIRAuthErrorCode(rawValue: (error?._code)!) {
                         switch errCode {
                         case .errorCodeEmailAlreadyInUse:
-                            let alertControllerSignUp = UIAlertController (title : "We can't find you", message: "The email you provided has already been used. You should be able to directly log in." , preferredStyle: .alert)
+                            let alertControllerSignUp = UIAlertController (title : "Oops", message: "The email you provided has already been used. You should be able to directly log in." , preferredStyle: .alert)
                             let actionSignUp = UIAlertAction (title: "OK", style: . cancel, handler : nil)
                             alertControllerSignUp.addAction(actionSignUp)
                             self.present(alertControllerSignUp, animated: true, completion: nil)

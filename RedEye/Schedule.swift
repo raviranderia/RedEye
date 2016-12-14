@@ -22,6 +22,10 @@ class Schedule: NSObject {
     
     var driverName: String!
     
+    var driverLastName: String!
+    
+    var driverProfilePicture: String!
+    
     var shuttleLicencePlate: String!
     
     var shuttleCapacity: String!
@@ -35,6 +39,10 @@ class Schedule: NSObject {
     var currentReservations = Array<Any>()
     
     var reservations = [Reservation]()
+    
+    var reservationID = [String]()
+    
+    var scheduleActive: String!
     
     
     
@@ -66,6 +74,7 @@ class Schedule: NSObject {
         return shuttleDepartureTime
     }
     
+    
     var _driverName: String{
         if driverName == nil{
             driverName = ""
@@ -73,11 +82,19 @@ class Schedule: NSObject {
         return driverName
     }
     
-    var _shuttleLicencePlate: String{
-        if shuttleLicencePlate == nil{
-            shuttleLicencePlate = ""
+    
+    var _driverLastName: String{
+        if driverLastName == nil{
+            driverLastName = ""
         }
-        return driverName
+        return driverLastName
+    }
+    
+    var _driverProfilePicture: String{
+        if driverProfilePicture == nil{
+            driverProfilePicture = ""
+        }
+        return driverProfilePicture
     }
     
     var _shuttleCapacity: String{
@@ -99,7 +116,14 @@ class Schedule: NSObject {
         
     }
     
-    init (id: String, shuttleDepartureDate: String, shuttleID:String, driverID: String, shuttleDepartureTime:String, driverName: String, shuttleCapacity: String,
+    init(id: String, shuttleDepartureDate: String, shuttleDepartureTime:String, numSeatLeft: String){
+        self.id = id
+        self.shuttleDepartureDate = shuttleDepartureDate
+        self.shuttleDepartureTime = shuttleDepartureTime
+        self.shuttleCapacity = numSeatLeft
+    }
+    
+    init (id: String, shuttleDepartureDate: String, shuttleID:String, driverID: String, shuttleDepartureTime:String, driverName: String, driverLastName : String , driverProfilePicture : String , shuttleCapacity: String,
           shuttleLicencePlate: String){
         
         self.id = id
@@ -108,6 +132,8 @@ class Schedule: NSObject {
         self.driverID = driverID
         self.shuttleDepartureTime = shuttleDepartureTime
         self.driverName = driverName
+        self.driverLastName = driverLastName
+        self.driverProfilePicture = driverProfilePicture
         self.shuttleCapacity = shuttleCapacity
         self.shuttleLicencePlate = shuttleLicencePlate
     }

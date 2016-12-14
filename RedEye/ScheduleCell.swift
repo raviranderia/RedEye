@@ -12,16 +12,23 @@ import Firebase
 
 protocol ScheduleTableViewCellDelegate {
     func didTappedSwitch(cell: ScheduleCell)
+    func didTappedViewStudentButton(cell: ScheduleCell)
 }
 
 class ScheduleCell: UITableViewCell {
     
     var schedule : Schedule!
     
+    var reservationList = [String]()
+    
     let uid = FIRAuth.auth()?.currentUser?.uid
     @IBOutlet weak var driverProfilePicture: UIImageView!
     
-    @IBOutlet weak var driverName: UILabel!
+    var driverProfilePictureUrl : String!
+
+    @IBOutlet weak var driverFirstName: UILabel!
+    
+    @IBOutlet weak var driverLastName: UILabel!
     
     @IBOutlet weak var shuttleDepartureDate: UILabel!
     
@@ -41,6 +48,19 @@ class ScheduleCell: UITableViewCell {
     
     var isReserved = false
     
+    
+    @IBOutlet weak var viewStudentsBtn: UIButton!
+    
+    @IBAction func viewStudents(_ sender: Schedule) {
+        
+        delegate.didTappedViewStudentButton(cell: self)
+//        self.schedule = sender
+//        reservationList = schedule.reservationID
+//        print ("reservationList \(reservationList)")
+
+    }
+    
+    
     @IBAction func reserveSwitchValueChanged(_ sender: Any) {
         delegate.didTappedSwitch(cell: self)
     }
@@ -48,13 +68,14 @@ class ScheduleCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        driverProfilePicture.layer.cornerRadius = driverProfilePicture.frame.size.height/2
+        driverProfilePicture.layer.masksToBounds = true
     }
     
     override func prepareForReuse() {
             self.reserveSwitch.isOn = false
         
-        self.reservationStatus.text = "Switch button to reserve"
+        self.reservationStatus.text = ""
         
         
     }
@@ -67,6 +88,11 @@ class ScheduleCell: UITableViewCell {
         super.init(coder: aDecoder)
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+    }
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
@@ -76,21 +102,34 @@ class ScheduleCell: UITableViewCell {
     func updateScheduleCell(_ schedule: Schedule){
         self.schedule = schedule
         isReserved = false
-        shuttleDepartureDate.text = self.schedule.shuttleDepartureDate
+        shuttleDepartureDate.text = self.reformatDate(self.schedule.shuttleDepartureDate!)
         shuttleDepartureTime.text = self.schedule.shuttleDepartureTime
-        driverName.text = self.schedule.driverName
+        driverFirstName.text = self.schedule.driverName
+        driverLastName.text = self.schedule.driverLastName
         shuttleCapacity.text = self.schedule.shuttleCapacity
         shuttleLicencePlate.text = self.schedule.shuttleLicencePlate
-      
-    
-        
+        driverProfilePictureUrl = self.schedule.driverProfilePicture
+        if driverProfilePictureUrl == "No profile picture" {
+            driverProfilePicture.image = UIImage(named:"Profile Picture Icon-2")
+        } else{
+            driverProfilePicture.loadImageWithCache(urlString: driverProfilePictureUrl)
+            
+        }
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    func reformatDate(_ shuttleDepartureDate : String) -> String{
+        let dateFormatter = DateFormatter()
+        let date = shuttleDepartureDate
         
+        dateFormatter.dateFormat = "MM, dd, yyyy"
+        let stringDate = dateFormatter.date(from: date)
         
+        dateFormatter.dateFormat = "EEEE, MMMM dd, yyyy"
+        let formattedDate = dateFormatter.string(from: stringDate!)
+
+        return formattedDate
     }
+
     func updateReservationStatusCell(_ schedule: Schedule){
         self.schedule = schedule
         
@@ -108,6 +147,9 @@ class ScheduleCell: UITableViewCell {
         self.shuttleCapacity.text = schedule.currentSeatAvalaible
     }
 
-    
 
+}
+
+extension String {
+    
 }

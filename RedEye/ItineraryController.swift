@@ -26,6 +26,10 @@ class ItineraryController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.title = "Itinerary"
+        self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Georgia", size: 34)!, NSForegroundColorAttributeName: Constants.Colors.redColor]
+        
         self.fetchStudentsAddresses {}
        
         //self.drawMarkers()

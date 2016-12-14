@@ -32,6 +32,8 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
     
     @IBOutlet var studentFirstNameLabel: UILabel!
     
+    @IBOutlet weak var studentLastName: UILabel!
+    
     @IBOutlet weak var backgroundPicture: UIImageView!
     
     @IBOutlet weak var profileInfoHolderView: UIView!
@@ -73,17 +75,10 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
             
             appDelegate.window?.rootViewController
                 = self.storyboard?.instantiateViewController(withIdentifier: "switchVC")
-            
-            ////            let profileController = ProfileController()
-            ////            present(profileController, animated:true, completion:nil)
-            //            performSegue(withIdentifier: "goToProfile", sender: nil)
-            //
+      
         }
     }
-    @IBAction func logoutBtnPressed(_ sender: Any) {
-        
-       
-    }
+
     
     var majors = ["Accountig", "Accounting - CPS", "African Studies", "African-American Studies", "Air Force ROTC", "American Sign Language"]
     
@@ -91,8 +86,8 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
     //var majors = [Major]()
   
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
         
         self.view.backgroundColor = UIColor.black
         self.profileInfoHolderView.backgroundColor = UIColor.clear
@@ -112,16 +107,16 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         
         self.profileInfoHolderView.layer.cornerRadius = 17
         self.profileInfoHolderView.layer.borderWidth = 2
-         self.profileInfoHolderView.layer.borderColor = (Constants.Colors.grayColor).cgColor
+        self.profileInfoHolderView.layer.borderColor = (Constants.Colors.grayColor).cgColor
         
-       
+        
         majorPicker.delegate = self
         majorPicker.dataSource = self
         
         majorTextField.delegate = self
         addressTextField.delegate = self
         
-       majorTextField.inputView = majorPicker
+        majorTextField.inputView = majorPicker
         
         activityIndicator.center = self.view.center
         
@@ -132,12 +127,19 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         self.majorTextField.isHidden = true
         self.addressTextField.isHidden = true
         self.studentFirstNameLabel.isHidden = true
+        self.studentLastName.isHidden = true
         self.profilePictureImage.isHidden = true
         activityIndicator.startAnimating()
-     
+        
         
         self.fetchStudentInformation()
         self.fetchStudentAddress()
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        
+        
         
     }
 
@@ -155,59 +157,83 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         guard let uid = FIRAuth.auth()?.currentUser?.uid else{
             return
         }
+        
+        var studentFirstName: String = ""
+        var studentLastName:  String = ""
+        var studentMajor: String = ""
+        var studentProfilePicture: String = ""
+        
         FIRDatabase.database().reference().child("Students").child(uid).observeSingleEvent(of: .value, with: {(snapshot: FIRDataSnapshot) in
-            
             print(snapshot)
-    
-           
-            if let dictionary = snapshot.value as? [String:AnyObject]{
-                DispatchQueue.main.async{
-                    self.studentFirstNameLabel.text = dictionary["firstName"] as? String
-                    self.majorTextField.text = dictionary["studentMajor"] as? String
-                    if let profilePictureUrl = dictionary["profilePictureUrl"] as? String{
-//                        if let cachedPicture = pictureCache.object(forKey: profilePictureUrl as NSString)! as? UIImage{
-//                            self.profilePictureImage.image = cachedPicture
-//                            return
-//                        }
-                        let url = NSURL (string: profilePictureUrl)
-                        URLSession.shared.dataTask(with: url! as URL, completionHandler:
-                            {(data, response, error) in
-                                if error != nil {
-                                    print("Error loading profile picture \(error?.localizedDescription)")
-                                    return
-                                } else{
-                                      DispatchQueue.main.async{
-                                        if let downloadedImage = UIImage(data: data!){
-                                           // pictureCache.setObject(downloadedImage, forKey: profilePictureUrl as NSString)
-                                            self.activityIndicator.stopAnimating()
-                                            self.profileInfoHolderView.isHidden=false
-                                            self.majorTextField.isHidden = false
-                                            self.addressTextField.isHidden = false
-                                            self.studentFirstNameLabel.isHidden = false
-                                            self.profilePictureImage.isHidden = false
-                                            self.profilePictureImage.image = downloadedImage
-                                            self.backgroundPicture.image = downloadedImage
-                                        }
-                                    
-                                }
-                                }
-                                
-                            
-                        }).resume()
-                    }
-                    
-                }
-               
+            
+            
+            if snapshot.value is NSNull {
+                return
             }
-        }
+            let dictionary = snapshot.value as! [String:AnyObject]
+            //DispatchQueue.main.async{
+            
+            if let firstName = dictionary["firstName"] as? String {
+                studentFirstName = firstName
+            }
+            
+            if let lastName = dictionary["lastName"] as? String {
+                studentLastName = lastName
+            }
+            
+            if let major = dictionary["studentMajor"] as? String {
+                studentMajor = major
+            }
+            
+            if let profilePictureUrl = dictionary["profilePictureUrl"] as? String{
+                
+                studentProfilePicture = profilePictureUrl
+                print("student profile picture \(studentProfilePicture)")
+            }
+            //                        if let cachedPicture = pictureCache.object(forKey: profilePictureUrl as NSString)! as? UIImage{
+            //                            self.profilePictureImage.image = cachedPicture
+            //                            return
+            //                        }
+
+                        if studentProfilePicture == "No profile picture"{
+                        DispatchQueue.main.async{
+                            self.activityIndicator.stopAnimating()
+                            self.profileInfoHolderView.isHidden=false
+                            self.majorTextField.isHidden = false
+                            self.addressTextField.isHidden = false
+                            self.studentFirstNameLabel.isHidden = false
+                            self.studentLastName.isHidden = false
+                            self.profilePictureImage.isHidden = false
+                            self.studentFirstNameLabel.text = studentFirstName
+                            self.studentLastName.text = studentLastName
+                            self.majorTextField.text = studentMajor
+                            self.profilePictureImage.image = UIImage(named:"Profile Picture Icon-2")
+                            self.backgroundPicture.image = UIImage(named:"Profile Picture Icon-2")
+                        }
+                    } else{
+                        
+                    let url = studentProfilePicture
+                    
+                                    print("Succefully loaded profile picture")
+                                    self.activityIndicator.stopAnimating()
+                                    self.profileInfoHolderView.isHidden=false
+                                    self.majorTextField.isHidden = false
+                                   self.addressTextField.isHidden = false
+                                self.studentFirstNameLabel.isHidden = false
+                                self.studentLastName.isHidden = false
+                                self.profilePictureImage.isHidden = false
+                                self.studentFirstNameLabel.text = studentFirstName
+                                self.studentLastName.text = studentLastName
+                               self.majorTextField.text = studentMajor
+                                    self.profilePictureImage.loadImageWithCache(urlString: url)
+                                    self.backgroundPicture.loadImageWithCache(urlString: url)
+                       
+            }
+        } , withCancel: nil)
         
-        
-        )
-       
     
     }
-    
-  
+
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -260,8 +286,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         guard let uid = FIRAuth.auth()?.currentUser?.uid else{
             return
         }
-         let ref = FIRDatabase.database().reference(fromURL: Constants.URL.firebaseDatabase)
-        let studentReference = ref.child("Students").child(uid)
+        let studentReference = Constants.URL.ref.child("Students").child(uid)
         let values = ["studentMajor": majorTextField.text]
         studentReference.updateChildValues(values, withCompletionBlock: { (error, ref) in
             if error != nil {
@@ -278,8 +303,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         guard let uid = FIRAuth.auth()?.currentUser?.uid else{
             return
         }
-        let ref = FIRDatabase.database().reference(fromURL: Constants.URL.firebaseDatabase)
-        let studentReference = ref.child("Address").child(uid)
+        let studentReference = Constants.URL.ref.child("Address").child(uid)
         let values = ["studentAddress": addressTextField.text!, "studentPlaceID": studentAddress.placeID, "studentID": uid]
         studentReference.updateChildValues(values, withCompletionBlock: { (error, ref) in
             if error != nil {
@@ -482,7 +506,40 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
     
     
 }
-    
+
+//extension UIImageView {
+//    
+//    
+//    
+//    
+//    func loadImageWithCache(urlString: String) {
+//        
+//        if let cachedImage = imageCache.object(forKey: urlString as NSString) as? UIImage {
+//            self.image = cachedImage
+//            return
+//        }
+//        
+//        let url = NSURL (string: urlString)
+//        URLSession.shared.dataTask(with:url as! URL, completionHandler: {(data, response, error) in
+//            
+//            if error != nil {
+//                print("Error loading profile picture \(error?.localizedDescription)")
+//                return
+//            } else{
+//                DispatchQueue.main.async{
+//                    if let cachedImage = UIImage(data:data!){
+//                        imageCache.setObject(cachedImage, forKey: urlString as NSString)
+//                        self.image = cachedImage
+//                        
+//                    }
+//                    
+//                    
+//                    
+//                }}
+//        }).resume()
+//        
+//    }
+//}
     
 
 //    
