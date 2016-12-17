@@ -8,13 +8,15 @@
 
 import UIKit
 import Firebase
+import GooglePlaces
+import Alamofire
 
 // 1. List all shuttle departure time from 7 PM to 6 AM
 // 2. The 7 PM shuttle disapears when the driver left 
 
 // create a child under each schedule id - increment the number of seat reserved - call constructor for schedule to update cell
 
-class ScheduleController: UIViewController, UITableViewDelegate, UITableViewDataSource, ScheduleTableViewCellDelegate {
+class ScheduleController: UIViewController, UITableViewDelegate, UITableViewDataSource, ScheduleTableViewCellDelegate, GMSAutocompleteViewControllerDelegate {
 
     var scheduleList = [Schedule]()
     var allReservations = [Reservation]()
@@ -26,10 +28,12 @@ class ScheduleController: UIViewController, UITableViewDelegate, UITableViewData
     var scheduleIds = [String]()
     var numSeatReservation = 0
     var shuttleCapacityNum: String = ""
+    var studentAddress : String!
     var schedule = Schedule()
     var reservation = Reservation()
     let uid = FIRAuth.auth()?.currentUser?.uid
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+    var studentAddressLongAndLat = StudentAddress()
     
     var reservations: NSDictionary = [:]
     
@@ -37,15 +41,14 @@ class ScheduleController: UIViewController, UITableViewDelegate, UITableViewData
     
     @IBOutlet weak var scheduleTableView: UITableView!
     
-    func updateTableView() -> Void {
+    func updateTableView(){
         
-        self.scheduleList.removeAll()
-        // refresh page
+         self.scheduleList.removeAll()
         fetchDriversInformation()
         fetchShuttleInformation()
         fetchShuttleSchedule()
         
-        // self.refreshControl.endRefreshing()
+        self.refreshControl.endRefreshing()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -64,7 +67,7 @@ class ScheduleController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
         
-        self.navigationController?.navigationBar.topItem?.title = "schedule"
+        self.title = "schedule"
         self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Georgia", size: 34)!, NSForegroundColorAttributeName: Constants.Colors.redColor]
         
         scheduleTableView.dataSource = self
@@ -81,14 +84,16 @@ class ScheduleController: UIViewController, UITableViewDelegate, UITableViewData
         fetchDriversInformation()
         fetchShuttleInformation()
         fetchShuttleSchedule()
+        
+        
+        self.getCurrentUserLoggedAddress { (userAddress) in
+            
+            self.studentAddress = userAddress
+        }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-       
-        
-
     }
     
 
@@ -117,50 +122,29 @@ class ScheduleController: UIViewController, UITableViewDelegate, UITableViewData
         
         cell?.delegate = self
         cell?.updateScheduleCell(schedule)
+        //cell?.addressLabel.text = getCurrentlyLoggedInStudentAddress(){(studentAddress)}
         self.activityIndicator.stopAnimating()
         self.scheduleTableView.isHidden=false
-    
+        
+
         
         cell?.shuttleCapacity.text = schedule.currentSeatAvalaible
         cell?.reserveSwitch.isOn = schedule.reserved
         cell?.viewStudentsBtn.isHidden = !schedule.reserved
+        cell?.yourDestinationLabel.isHidden = !schedule.reserved
+        cell?.addressLabel.isHidden = !schedule.reserved
+        cell?.modifyAddressLabel.isHidden = !schedule.reserved
         if schedule.reserved == true {
              cell?.reservationStatus.text = "Reserved"
+            cell?.addressLabel.text = self.studentAddress
+            
         } else{
             cell?.reservationStatus.text = ""
         }
         
-        
-        
-       // cell?.viewStudents(schedule)
-        
         return cell!
     
     }
-    
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        /*
-        if let cell = tableView.cellForRow(at: indexPath) as? ScheduleCell {
-            let indexPath = self.scheduleTableView.indexPath(for: cell)!
-            let studentsListController = StudentsListController()
-            studentsListController.getReservationIds([self.allReservationsId[indexPath.row]])
-            self.navigationController?.pushViewController(studentsListController, animated: true)
-            print("passing reservations id \(self.allReservationsId[indexPath.row])")
-        }*/
-    }
-    
-//      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if let cell = sender as? ScheduleCell {
-//            let indexPath = self.scheduleTableView.indexPath(for: cell)!
-//            let studentsListController = segue.destination as! StudentsListController
-//            studentsListController.getReservationIds([self.allReservationsId[indexPath.row]])
-//            print("getReservationsIds \(studentsListController.getReservationIds([self.allReservationsId[indexPath.row]]))")
-//            self.navigationController?.pushViewController(studentsListController, animated: true)
-//            print("passing reservations id \(self.allReservationsId[indexPath.row])")
-//        }
-//    }
     
     
     func fetchDriversInformation(){
@@ -223,11 +207,11 @@ class ScheduleController: UIViewController, UITableViewDelegate, UITableViewData
         var driverProfilePicture : String = ""
         var shuttleLicencePlateNum: String = ""
         var numSeatsLeft: String = ""
+        var scheduleActive: String = ""
         
         FIRDatabase.database().reference().child("Schedule").observe(.childAdded, with: { (snapshot) in
             let dictionary = snapshot.value as! [String : AnyObject]
             let key = snapshot.key
-            self.scheduleIds.append(key)
           
             
             if let driverId = dictionary["driverID"] as? String{
@@ -244,6 +228,11 @@ class ScheduleController: UIViewController, UITableViewDelegate, UITableViewData
             if let shuttleId = dictionary["shuttleID"] as? String {
                 shuttleID = shuttleId
             }
+            
+            if let scheduleStatus = dictionary["scheduleActive"] as? String {
+                scheduleActive = scheduleStatus
+            }
+            
             
             
             let driver = self.driversList
@@ -294,7 +283,7 @@ class ScheduleController: UIViewController, UITableViewDelegate, UITableViewData
                 }
             }
      
-            self.schedule = Schedule(id: key, shuttleDepartureDate: shuttleDepartureDate, shuttleID:shuttleID, driverID: driverID, shuttleDepartureTime:shuttleDepartureTime, driverName : driverFirstName, driverLastName: driverLast, driverProfilePicture: driverProfilePicture , shuttleCapacity: numSeatsLeft, shuttleLicencePlate: shuttleLicencePlateNum)
+            self.schedule = Schedule(id: key, shuttleDepartureDate: shuttleDepartureDate, shuttleID:shuttleID, driverID: driverID, shuttleDepartureTime:shuttleDepartureTime, driverName : driverFirstName, driverLastName: driverLast, driverProfilePicture: driverProfilePicture , shuttleCapacity: numSeatsLeft, shuttleLicencePlate: shuttleLicencePlateNum, scheduleActive: scheduleActive)
             
             self.schedule.currentSeatAvalaible = numSeatsLeft
             self.schedule.reservations = self.allReservations
@@ -311,12 +300,10 @@ class ScheduleController: UIViewController, UITableViewDelegate, UITableViewData
                 }
             }
             
-            
-            let scheduleActive = dictionary["scheduleActive"] as? String
-            
             if scheduleActive == "YES" {
                 self.schedule.scheduleActive = "YES"
                 self.scheduleList.append(self.schedule)
+                self.scheduleIds.append(key)
                 DispatchQueue.main.async{
                     self.scheduleTableView.reloadData()
                 }
@@ -335,14 +322,35 @@ class ScheduleController: UIViewController, UITableViewDelegate, UITableViewData
         
     }
     
+    func getCurrentUserLoggedAddress(completionHandler: @escaping (_ studentAddress: String) -> () ) {
+        
+        FIRDatabase.database().reference().child("Address").child(uid!).observe(.value, with: {  (snapshot) in
+            
+            if let studentAddressInfo = snapshot.value as? [String : AnyObject] {
+                self.studentAddress = studentAddressInfo["studentAddress"] as? String
+                completionHandler(self.studentAddress)
+                
+            }
+            
+        }, withCancel: nil)
+    }
+
+    
+    func didTappedModifyAddress(cell: ScheduleCell) {
+        let autoComplete = GMSAutocompleteViewController()
+        autoComplete.delegate = self
+        
+        autoComplete.searchDisplayController?.searchBar.setSerchTextcolor(color: UIColor.red)
+        
+        
+        self.present(autoComplete, animated: true, completion: nil)
+    }
+    
     func didTappedViewStudentButton(cell: ScheduleCell) {
-        
-        
-        
-        
         
         let indexPath = self.scheduleTableView.indexPath(for: cell)
         let schedule = scheduleList[(indexPath?.row)!]
+        print("schedule tapped view students \(schedule.id)")
         
         
         let studentsVC: StudentsListController = self.storyboard?.instantiateViewController(withIdentifier: "studentsVC") as! StudentsListController
@@ -357,249 +365,24 @@ class ScheduleController: UIViewController, UITableViewDelegate, UITableViewData
     
     func didTappedSwitch(cell: ScheduleCell) {
         
-        DispatchQueue.global(qos: .default).async {
-            self.updateTableView()
+        //DispatchQueue.global(qos: .default).async {
+          // self.updateTableView()
             
-            DispatchQueue.main.async {
-                guard let uid = FIRAuth.auth()?.currentUser?.uid else {
-                    return
-                }
-                let indexPath = self.scheduleTableView.indexPath(for: cell)
-                let schedule = self.scheduleList[(indexPath?.row)!]
-                
-                if schedule.scheduleActive != "YES" {
-                    
-                    cell.reserveSwitch.isOn = false
-                    return;
-                    
-                }
-                
-                
-                //         var numberSeatLeft : String = ""
-                //        //let firstQueue = DispatchQueue(label: "firstQueue", qos: DispatchQoS.userInitiated)
-                //        // firstQueue.async {
-                //        let scheduleReference = mainRef.child("Schedule").child(self.scheduleIds[(indexPath?.row)!])
-                //
-                //        scheduleReference.observeSingleEvent(of: .value, with: {(snapshot: FIRDataSnapshot) in
-                //
-                //            let scheduleInfo = snapshot.value as? [String: AnyObject]
-                //            numberSeatLeft = (scheduleInfo?["numSeatsLeft"] as? String)!
-                //            print("number seat \(numberSeatLeft) ")
-                //            if numberSeatLeft == "0" {
-                //                self.shuttleIsFull()
-                //                DispatchQueue.main.async {
-                //                    cell.reserveSwitch.isOn = false
-                //                    return
-                //                }
-                //            }
-                //        } , withCancel: nil)
-                //        return
-                
-                // }
-                
-                
-                let reservationReference = Constants.URL.ref.child("Schedule").child(self.scheduleIds[(indexPath?.row)!]).child("Reservations").child("\(uid)")
-                
-                let studentReference = Constants.URL.ref.child("Students").child(uid)
-                
-                if cell.reserveSwitch.isOn {
-                    
-                    
-                    studentReference.observeSingleEvent(of: .value, with: { (snapshot: FIRDataSnapshot) in
-                        
-                        
-                        let userInfo = snapshot.value as? [String:AnyObject]
-                        let hasReservation = userInfo?["hasReservation"] as? String
-                        var numberSeatLeft : String = ""
-                        //let firstQueue = DispatchQueue(label: "firstQueue", qos: DispatchQoS.userInitiated)
-                        // firstQueue.async {
-                        let scheduleReference = Constants.URL.ref.child("Schedule").child(self.scheduleIds[(indexPath?.row)!])
-                        
-                        scheduleReference.observeSingleEvent(of: .value, with: {(snapshot: FIRDataSnapshot) in
-                            
-                            let scheduleInfo = snapshot.value as? [String: AnyObject]
-                            numberSeatLeft = (scheduleInfo?["numSeatsLeft"] as? String)!
-                            print("number seat \(numberSeatLeft) ")
-                            if numberSeatLeft == "0" && hasReservation == "NO" {
-                                self.shuttleIsFull()
-                                DispatchQueue.main.async {
-                                    cell.reserveSwitch.isOn = false
-                                    return
-                                }
-                            } else {
-                                if hasReservation == "YES" {
-                                    
-                                    self.reservationAlreadyMadeForAnotherShuttle()
-                                    DispatchQueue.main.async {
-                                        cell.reserveSwitch.isOn = false
-                                        return
-                                    }
-                                    //return
-                                    
-                                }
-                                    
-                                else {
-                                    
-                                    
-                                    let timeStamp = self.getCurrentTimeStamp()
-                                    let reservationDictionary = ["studentId":uid, "reservationTimeStamp": timeStamp, "reservationStatus":"Reserved", "scheduleID":schedule.id]
-                                    
-                                    reservationReference.updateChildValues(reservationDictionary, withCompletionBlock: { (error, ref) in
-                                        
-                                        if error != nil {
-                                            print("ERROR: \(error?.localizedDescription)")
-                                            return
-                                        } else {
-                                            
-                                            let hasReservation = ["hasReservation":"YES"]
-                                            
-                                            studentReference.updateChildValues(hasReservation, withCompletionBlock: { (error, ref) in
-                                                if error != nil {
-                                                    print("ERROR: \(error?.localizedDescription)")
-                                                    return
-                                                } else {
-                                                    Constants.URL.ref.child("Schedule").child(self.scheduleIds[(indexPath?.row)!]).observeSingleEvent(of: .value, with: { (snapshot: FIRDataSnapshot) in
-                                                        
-                                                        if let scheduleInfo = snapshot.value as? [String : AnyObject] {
-                                                            
-                                                            let numSeatLeft = scheduleInfo["numSeatsLeft"] as! String
-                                                            let numSeatsReserved = scheduleInfo["numSeatsReserved"] as! String
-                                                            
-                                                            var numSeatLeftINT: Int = Int(numSeatLeft)!
-                                                            var numSeatsReservedINT: Int = Int(numSeatsReserved)!
-                                                            
-                                                            numSeatLeftINT = numSeatLeftINT - 1
-                                                            numSeatsReservedINT = numSeatsReservedINT + 1
-                                                            
-                                                            //                                            if numSeatsReservedINT > Int(schedule.shuttleCapacity)! || numSeatLeftINT <= 0 {
-                                                            //                                                shuttleFull == true
-                                                            //                                                //self.shuttleIsFull()
-                                                            //                                                //return
-                                                            //                                            }
-                                                            
-                                                            schedule.currentSeatAvalaible = "\(numSeatLeftINT)"
-                                                            schedule.reserved = true
-                                                            
-                                                            let reservationUpdate = Constants.URL.ref.child("Schedule").child(self.scheduleIds[(indexPath?.row)!])
-                                                            
-                                                            let seatValues = ["numSeatsReserved": "\(numSeatsReservedINT)", "numSeatsLeft" : "\(numSeatLeftINT)"] as [String : Any]
-                                                            
-                                                            reservationUpdate.updateChildValues(seatValues, withCompletionBlock: { (error, ref) in
-                                                                
-                                                                if error != nil {
-                                                                    print("ERROR: \(error?.localizedDescription)")
-                                                                } else {
-                                                                    
-                                                                    DispatchQueue.main.async {
-                                                                        cell.viewStudentsBtn.isHidden = false
-                                                                        cell.reserveSwitch.isOn = true
-                                                                        cell.updateReservationStatusCell(schedule)
-                                                                        cell.updatedSchedule(schedule)
-                                                                        
-                                                                    }
-                                                                    
-                                                                    
-                                                                }
-                                                            })
-                                                        }
-                                                    })
-                                                }
-                                            })
-                                        }
-                                    })
-                                }
-                            }
-                            
-                        } , withCancel: nil)
-                        //return
-                        
-                        
-                        
-                        
-                        
-                        
-                    })
-                    
-                    
-                    
-                } else {
-                    //let timeStamp = self.getCurrentTimeStamp()
-                    //let reservationDictionary = ["studentId":uid, "reservationTimeStamp": timeStamp, "reservationStatus":"Cancelled", "scheduleID":schedule.id]
-                    
-                    //reservationReference.updateChildValues(reservationDictionary, withCompletionBlock: { (error, ref) in
-                    reservationReference.removeValue(completionBlock: { (error, ref) in
-                        
-                        if error != nil {
-                            print("ERROR: \(error?.localizedDescription)")
-                            return
-                        } else {
-                            
-                            let hasReservation = ["hasReservation":"NO"]
-                            
-                            studentReference.updateChildValues(hasReservation, withCompletionBlock: { (error, ref) in
-                                if error != nil {
-                                    print("ERROR: \(error?.localizedDescription)")
-                                    return
-                                } else {
-                                    Constants.URL.ref.child("Schedule").child(self.scheduleIds[(indexPath?.row)!]).observeSingleEvent(of: .value, with: { (snapshot: FIRDataSnapshot) in
-                                        
-                                        if let scheduleInfo = snapshot.value as? [String : AnyObject] {
-                                            
-                                            let numSeatLeft = scheduleInfo["numSeatsLeft"] as! String
-                                            let numSeatsReserved = scheduleInfo["numSeatsReserved"] as! String
-                                            
-                                            var numSeatLeftINT: Int = Int(numSeatLeft)!
-                                            var numSeatsReservedINT: Int = Int(numSeatsReserved)!
-                                            
-                                            numSeatLeftINT = numSeatLeftINT + 1
-                                            numSeatsReservedINT = numSeatsReservedINT - 1
-                                            
-                                            //                                    if numSeatsReservedINT > Int(schedule.shuttleCapacity)! || numSeatLeftINT <= 0 {
-                                            //                                        self.shuttleIsFull()
-                                            //                                        return
-                                            //                                    }
-                                            
-                                            schedule.currentSeatAvalaible = "\(numSeatLeftINT)"
-                                            schedule.reserved = false
-                                            
-                                            let reservationUpdate = Constants.URL.ref.child("Schedule").child(self.scheduleIds[(indexPath?.row)!])
-                                            
-                                            let seatValues = ["numSeatsReserved": "\(numSeatsReservedINT)", "numSeatsLeft" : "\(numSeatLeftINT)"] as [String : Any]
-                                            
-                                            reservationUpdate.updateChildValues(seatValues, withCompletionBlock: { (error, ref) in
-                                                
-                                                if error != nil {
-                                                    print("ERROR: \(error?.localizedDescription)")
-                                                } else {
-                                                    
-                                                    DispatchQueue.main.async {
-                                                        cell.viewStudentsBtn.isHidden = true
-                                                        cell.reserveSwitch.isOn = false
-                                                        cell.updateReservationStatusCell(schedule)
-                                                        cell.updatedSchedule(schedule)
-                                                    }
-                                                    
-                                                    
-                                                }
-                                            })
-                                        }
-                                    })
-                                }
-                                
-                            })
-                            
-                        }
-                    })
-                }
-            }
+           // DispatchQueue.main.async {
+        
+        
+        if cell.reserveSwitch.isOn {
+            
+            self.confirmYourAddress(scheduleCell: cell)
+            
+        } else {
+            self.updateScheduleInfo(cell: cell)
         }
         
         
-
-        
-        
-
     }
+        
+    //}
     
     
     func getCurrentTimeStamp() -> String {
@@ -629,9 +412,454 @@ class ScheduleController: UIViewController, UITableViewDelegate, UITableViewData
         self.present(alertController, animated: true, completion: nil)
         
     }
+    
+    func addressNotAvailable(){
+        let controller = UIAlertController(title: "Where are you going?", message: "We need you to enter your destination", preferredStyle: .alert)
+        
+        
+        let changeAddress = UIAlertAction(title: "Set address", style: .default) { (action) in
+            let autoComplete = GMSAutocompleteViewController()
+            autoComplete.delegate = self
+            
+            autoComplete.searchDisplayController?.searchBar.setSerchTextcolor(color: UIColor.red)
+            
+            
+            self.present(autoComplete, animated: true, completion: nil)
+            
+        }
+        
+        controller.addAction(changeAddress)
+        
+        present(controller, animated: true, completion: nil)
 
     }
     
+    
+    func confirmYourAddress(scheduleCell: ScheduleCell){
+        
+        let controller = UIAlertController(title: "Confirm your destination", message: "Are you going to \(self.studentAddress!) ?", preferredStyle: .alert)
+        
+        let confirmAddress = UIAlertAction(title: "Yes", style: .cancel) { (action) in
+            
+            self.updateScheduleInfo(cell: scheduleCell)
+            return
+        }
+        
+        controller.addAction(confirmAddress)
+        
+        
+        let changeAddress = UIAlertAction(title: "No, modify address", style: .default) { (action) in
+            let autoComplete = GMSAutocompleteViewController()
+            autoComplete.delegate = self
+            
+            autoComplete.searchDisplayController?.searchBar.setSerchTextcolor(color: UIColor.red)
+            
+            
+            self.present(autoComplete, animated: true, completion: nil)
+            self.updateScheduleInfo(cell: scheduleCell)
+            return
+
+        }
+        
+        controller.addAction(changeAddress)
+        
+        present(controller, animated: true, completion: nil)
+        
+        
+    }
+    
+    func updateScheduleInfo(cell: ScheduleCell) {
+        
+        guard let uid = FIRAuth.auth()?.currentUser?.uid else {
+            return
+        }
+        let indexPath = self.scheduleTableView.indexPath(for: cell)
+        let schedule = self.scheduleList[(indexPath?.row)!]
+        print(schedule.id)
+        
+        var snapshotValues = [String]()
+        
+        FIRDatabase.database().reference().child("Address").observe(.childAdded, with: { (snapshot) in
+            snapshotValues.append(snapshot.key)
+        }, withCancel: nil)
+        
+        
+        FIRDatabase.database().reference().child("Address").child(uid).observe(.value, with: { (snapshot) in
+            
+            if let studentAddressInfo = snapshot.value as? [String : AnyObject] {
+                self.studentAddress = studentAddressInfo["studentAddress"] as? String
+            }
+            
+        }, withCancel: nil)
+        
+        
+        if schedule.scheduleActive != "YES" {
+            
+            cell.reserveSwitch.isOn = false
+            return;
+            
+        }
+        
+        let reservationReference = Constants.URL.ref.child("Schedule").child(self.scheduleIds[(indexPath?.row)!]).child("Reservations").child("\(uid)")
+        
+        let studentReference = Constants.URL.ref.child("Students").child(uid)
+        
+        if cell.reserveSwitch.isOn {
+            
+            
+            studentReference.observeSingleEvent(of: .value, with: { (snapshot: FIRDataSnapshot) in
+                
+                
+                let userInfo = snapshot.value as? [String:AnyObject]
+                let hasReservation = userInfo?["hasReservation"] as? String
+                var numberSeatLeft : String = ""
+                //let firstQueue = DispatchQueue(label: "firstQueue", qos: DispatchQoS.userInitiated)
+                // firstQueue.async {
+                let scheduleReference = Constants.URL.ref.child("Schedule").child(self.scheduleIds[(indexPath?.row)!])
+                
+                scheduleReference.observeSingleEvent(of: .value, with: {(snapshot: FIRDataSnapshot) in
+                    
+                    let scheduleInfo = snapshot.value as? [String: AnyObject]
+                    numberSeatLeft = (scheduleInfo?["numSeatsLeft"] as? String)!
+                    print("number seat \(numberSeatLeft) ")
+                    if numberSeatLeft == "0" && hasReservation == "NO" {
+                        self.shuttleIsFull()
+                        DispatchQueue.main.async {
+                            cell.reserveSwitch.isOn = false
+                            return
+                        }
+                    } else {
+                        if hasReservation == "YES" {
+                            
+                            self.reservationAlreadyMadeForAnotherShuttle()
+                            DispatchQueue.main.async {
+                                cell.reserveSwitch.isOn = false
+                                return
+                            }
+                            
+                        } else {
+                            //var snapshotValues = [String]()
+                            
+                            //FIRDatabase.database().reference().child("Address").observe(.childAdded, with: { (snapshot) in
+                            //    snapshotValues.append(snapshot.key)
+                            //     print("snapshot address \(snapshotValues)")
+                            // }, withCancel: nil)
+                            
+                            if snapshotValues.contains(uid) == false{
+                                self.addressNotAvailable()
+                                DispatchQueue.main.async {
+                                    cell.reserveSwitch.isOn = false
+                                    return
+                                }
+                                
+                            } else{
+                                
+                                
+                                DispatchQueue.main.async {
+                                    cell.reserveSwitch.isOn = false
+                                    return
+                                }
+                                
+                                let timeStamp = self.getCurrentTimeStamp()
+                                let reservationDictionary = ["studentId":uid, "reservationTimeStamp": timeStamp, "reservationStatus":"Reserved", "scheduleID":schedule.id]
+                                
+                                reservationReference.updateChildValues(reservationDictionary, withCompletionBlock: { (error, ref) in
+                                    
+                                    if error != nil {
+                                        print("ERROR: \(error?.localizedDescription)")
+                                        return
+                                    } else {
+                                        
+                                        let hasReservation = ["hasReservation":"YES"]
+                                        
+                                        studentReference.updateChildValues(hasReservation, withCompletionBlock: { (error, ref) in
+                                            if error != nil {
+                                                print("ERROR: \(error?.localizedDescription)")
+                                                return
+                                            } else {
+                                                Constants.URL.ref.child("Schedule").child(self.scheduleIds[(indexPath?.row)!]).observeSingleEvent(of: .value, with: { (snapshot: FIRDataSnapshot) in
+                                                    
+                                                    if let scheduleInfo = snapshot.value as? [String : AnyObject] {
+                                                        
+                                                        let numSeatLeft = scheduleInfo["numSeatsLeft"] as! String
+                                                        let numSeatsReserved = scheduleInfo["numSeatsReserved"] as! String
+                                                        
+                                                        var numSeatLeftINT: Int = Int(numSeatLeft)!
+                                                        var numSeatsReservedINT: Int = Int(numSeatsReserved)!
+                                                        
+                                                        numSeatLeftINT = numSeatLeftINT - 1
+                                                        numSeatsReservedINT = numSeatsReservedINT + 1
+                                                        
+                                                        schedule.currentSeatAvalaible = "\(numSeatLeftINT)"
+                                                        schedule.reserved = true
+                                                        
+                                                        let reservationUpdate = Constants.URL.ref.child("Schedule").child(self.scheduleIds[(indexPath?.row)!])
+                                                        
+                                                        let seatValues = ["numSeatsReserved": "\(numSeatsReservedINT)", "numSeatsLeft" : "\(numSeatLeftINT)"] as [String : Any]
+                                                        
+                                                        reservationUpdate.updateChildValues(seatValues, withCompletionBlock: { (error, ref) in
+                                                            
+                                                            if error != nil {
+                                                                print("ERROR: \(error?.localizedDescription)")
+                                                            } else {
+                                                                
+                                                                DispatchQueue.main.async {
+                                                                    cell.viewStudentsBtn.isHidden = false
+                                                                    cell.yourDestinationLabel.isHidden = false
+                                                                    cell.addressLabel.isHidden = false
+                                                                    cell.modifyAddressLabel.isHidden=false
+                                                                    cell.reserveSwitch.isOn = true
+                                                                    cell.updateReservationStatusCell(schedule)
+                                                                     cell.addressLabel.text = self.studentAddress
+                                                                    
+                                                               cell.updatedSchedule(schedule)
+                                                                    
+                                                                }
+                                                                
+                                                                
+                                                            }
+                                                        })
+                                                    }
+                                                })
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                        }}
+                    
+                } , withCancel: nil)
+                
+            })
+            
+            
+            
+        } else {
+            //let timeStamp = self.getCurrentTimeStamp()
+            //let reservationDictionary = ["studentId":uid, "reservationTimeStamp": timeStamp, "reservationStatus":"Cancelled", "scheduleID":schedule.id]
+            
+            //reservationReference.updateChildValues(reservationDictionary, withCompletionBlock: { (error, ref) in
+            reservationReference.removeValue(completionBlock: { (error, ref) in
+                
+                if error != nil {
+                    print("ERROR: \(error?.localizedDescription)")
+                    return
+                } else {
+                    let hasReservation = ["hasReservation":"NO"]
+                    
+                    studentReference.updateChildValues(hasReservation, withCompletionBlock: { (error, ref) in
+                        if error != nil {
+                            print("ERROR: \(error?.localizedDescription)")
+                            return
+                        } else {
+                            Constants.URL.ref.child("Schedule").child(self.scheduleIds[(indexPath?.row)!]).observeSingleEvent(of: .value, with: { (snapshot: FIRDataSnapshot) in
+                                
+                                if let scheduleInfo = snapshot.value as? [String : AnyObject] {
+                                    
+                                    let numSeatLeft = scheduleInfo["numSeatsLeft"] as! String
+                                    let numSeatsReserved = scheduleInfo["numSeatsReserved"] as! String
+                                    
+                                    var numSeatLeftINT: Int = Int(numSeatLeft)!
+                                    var numSeatsReservedINT: Int = Int(numSeatsReserved)!
+                                    
+                                    numSeatLeftINT = numSeatLeftINT + 1
+                                    numSeatsReservedINT = numSeatsReservedINT - 1
+                                    
+                                    schedule.currentSeatAvalaible = "\(numSeatLeftINT)"
+                                    schedule.reserved = false
+                                    
+                                    let reservationUpdate = Constants.URL.ref.child("Schedule").child(self.scheduleIds[(indexPath?.row)!])
+                                    
+                                    let seatValues = ["numSeatsReserved": "\(numSeatsReservedINT)", "numSeatsLeft" : "\(numSeatLeftINT)"] as [String : Any]
+                                    
+                                    reservationUpdate.updateChildValues(seatValues, withCompletionBlock: { (error, ref) in
+                                        
+                                        if error != nil {
+                                            print("ERROR: \(error?.localizedDescription)")
+                                        } else {
+                                            
+                                            DispatchQueue.main.async {
+                                                cell.viewStudentsBtn.isHidden = true
+                                                cell.yourDestinationLabel.isHidden = true
+                                                cell.addressLabel.isHidden = true
+                                                cell.modifyAddressLabel.isHidden = true
+                                                cell.reserveSwitch.isOn = false
+                                                cell.updateReservationStatusCell(schedule)
+                                                cell.updatedSchedule(schedule)
+                                            }
+                                            
+                                            
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                        
+                    })
+                    
+                }
+            })
+        }
+        //}
+    }
+    func confirmYourAddressCancelled(){
+        
+        let controller = UIAlertController(title: "Confirm your destination", message: "We could not save your new address. Are you still going to \(self.studentAddress!) ?", preferredStyle: .alert)
+        
+        let confirmAddress = UIAlertAction(title: "Yes", style: .cancel) { (action) in
+            return
+        }
+        
+        controller.addAction(confirmAddress)
+        
+        
+        let changeAddress = UIAlertAction(title: "No, modify address", style: .default) { (action) in
+            let autoComplete = GMSAutocompleteViewController()
+            autoComplete.delegate = self
+            
+            autoComplete.searchDisplayController?.searchBar.setSerchTextcolor(color: UIColor.red)
+            
+            
+            self.present(autoComplete, animated: true, completion: nil)
+            
+        }
+        
+        controller.addAction(changeAddress)
+        
+        present(controller, animated: true, completion: nil)
+        
+        
+    }
+    
+    func viewController(_ viewController: GMSAutocompleteViewController, didFailAutocompleteWithError error: Error) {
+        print ("Fail to get auto complete address \(error)")
+    }
+    
+    func wasCancelled(_ viewController: GMSAutocompleteViewController) {
+        self.dismiss(animated: true, completion: {
+        
+            self.confirmYourAddressCancelled()
+        })
+    }
+    
+  
+    
+    func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace){
+        
+
+        
+            guard let uid = FIRAuth.auth()?.currentUser?.uid else{
+                return
+            }
+            let studentReference = Constants.URL.ref.child("Address").child(uid)
+            let values = ["studentAddress": place.formattedAddress!, "studentPlaceID": place.placeID, "studentID": uid]
+            studentReference.updateChildValues(values, withCompletionBlock: { (error, ref) in
+                if error != nil {
+                    print ("Error saving address in database: \(error?.localizedDescription)")
+                    return
+                } else{
+                    print ("Successefully saved address \(place.formattedAddress!)")
+                }
+            })
+        
+        getAddressCordinates{}
+        //saveLatAndLong()
+        
+        
+     
+        self.dismiss(animated: true, completion: nil)
+        
+    }
+    
+    func confirmAutoCompleteAddress(){
+        let controller = UIAlertController(title: "Just to make sure", message: "Are you going to\(self.studentAddress!) ?", preferredStyle: .alert)
+        
+        let confirmAddress = UIAlertAction(title: "Yes", style: .cancel) { (action) in
+            return
+        }
+        
+        controller.addAction(confirmAddress)
+        
+        
+        let changeAddress = UIAlertAction(title: "No, modify address", style: .default) { (action) in
+            
+            let autoComplete = GMSAutocompleteViewController()
+            autoComplete.delegate = self
+            
+            autoComplete.searchDisplayController?.searchBar.setSerchTextcolor(color: UIColor.red)
+            
+            
+            autoComplete.present(autoComplete, animated: true, completion: nil)
+
+        
+    }
+        
+        controller.addAction(changeAddress)
+        
+        present(controller, animated: true, completion: nil)
+ 
+
+}
+    
+    
+    func getAddressCordinates(completed: @escaping DownloadComplete){
+        Alamofire.request("\(Constants.URL.googleGeocodingAPI)\(self.studentAddress.replacingOccurrences(of: " ", with: ""))\(Constants.Google.GEOLOCATION_API_KEY )").responseJSON {
+            response in
+            let result = response.result
+            if let dictionary = result.value as? Dictionary <String, AnyObject>{
+                if let results = dictionary["results"] as? [Dictionary <String, AnyObject>]{
+                    var latitudeRequest: Double = 0.0
+                    var longitudeRequest: Double = 0.0
+                    if let geometry = results[0]["geometry"] as?  Dictionary<String, AnyObject>{
+                        if let location = geometry["location"] as? Dictionary<String, AnyObject> {
+                            if let latitude = location["lat"] as? Double {
+                                latitudeRequest = latitude
+                                
+                            }
+                            if let longitude = location["lng"] as? Double{
+                                longitudeRequest = longitude
+                            }
+                        }
+                    }
+                    DispatchQueue.main.async(execute: { () -> Void in
+                        self.studentAddressLongAndLat = StudentAddress(latitude:latitudeRequest, longitude:longitudeRequest)
+                        print("ADDRESS CONSTRUCTOR \(self.studentAddressLongAndLat._latitude) \(self.studentAddressLongAndLat._longitude)")
+                        self.saveLatAndLong()
+                    })
+                    
+                    
+                }
+                
+            }
+            
+            
+        }
+        completed()
+        
+        
+    }
+    
+    func saveLatAndLong(){
+        guard let uid = FIRAuth.auth()?.currentUser?.uid else{
+            return
+        }
+        let ref = FIRDatabase.database().reference(fromURL: Constants.URL.firebaseDatabase)
+        let studentReference = ref.child("Address").child(uid)
+        let values = ["studentAddressLatitude" : self.studentAddressLongAndLat._latitude , "studentAddressLongitude" : self.studentAddressLongAndLat._longitude]
+        print("save latitude \(self.studentAddressLongAndLat._latitude) and save longitude \(self.studentAddressLongAndLat._longitude)")
+        studentReference.updateChildValues(values, withCompletionBlock: { (error, ref) in
+            if error != nil {
+                print ("Error saving lat and long in database: \(error?.localizedDescription)")
+                return
+            } else{
+                print ("Successefully saved lat and long \(self.studentAddressLongAndLat._latitude) \(self.studentAddressLongAndLat._longitude)")
+            }
+        })
+    }
+
+    
+}
+
   
 
     /*

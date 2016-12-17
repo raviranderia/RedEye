@@ -32,6 +32,8 @@ class Schedule: NSObject {
     
     var reserved: Bool = false
     
+    var cancelled: Bool = false
+    
     var currentSeatAvalaible: String!
     
     var studentWhoReserved = [Student]()
@@ -43,6 +45,9 @@ class Schedule: NSObject {
     var reservationID = [String]()
     
     var scheduleActive: String!
+    
+    var numSeatReserved: String!
+    
     
     
     
@@ -116,15 +121,17 @@ class Schedule: NSObject {
         
     }
     
-    init(id: String, shuttleDepartureDate: String, shuttleDepartureTime:String, numSeatLeft: String){
+    init(id: String, shuttleDepartureDate: String, shuttleDepartureTime:String, numSeatLeft: String, numSeatReserved: String, scheduleActive: String){
         self.id = id
         self.shuttleDepartureDate = shuttleDepartureDate
         self.shuttleDepartureTime = shuttleDepartureTime
         self.shuttleCapacity = numSeatLeft
+        self.numSeatReserved = numSeatReserved
+        self.scheduleActive = scheduleActive
     }
     
     init (id: String, shuttleDepartureDate: String, shuttleID:String, driverID: String, shuttleDepartureTime:String, driverName: String, driverLastName : String , driverProfilePicture : String , shuttleCapacity: String,
-          shuttleLicencePlate: String){
+          shuttleLicencePlate: String, scheduleActive: String){
         
         self.id = id
         self.shuttleDepartureDate = shuttleDepartureDate
@@ -136,6 +143,7 @@ class Schedule: NSObject {
         self.driverProfilePicture = driverProfilePicture
         self.shuttleCapacity = shuttleCapacity
         self.shuttleLicencePlate = shuttleLicencePlate
+        self.scheduleActive = scheduleActive
     }
 
 }

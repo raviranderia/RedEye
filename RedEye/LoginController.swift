@@ -50,7 +50,7 @@ class LoginController: UIViewController {
             appDelegate = UIApplication.shared.delegate as! AppDelegate
             
             appDelegate.window?.rootViewController
-                = self.storyboard?.instantiateViewController(withIdentifier: "mainTabBarController")
+                = self.storyboard?.instantiateViewController(withIdentifier: "studentTabBarController")
 
             
         }

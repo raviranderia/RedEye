@@ -14,6 +14,9 @@ class StudentsListController: UIViewController, UITableViewDataSource, UITableVi
     
     @IBOutlet weak var studentTableView: UITableView!
     
+    @IBAction func viewItineraryBtnPressed(_ sender: Any) {
+        
+    }
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     
     var students = [Student]()
@@ -23,6 +26,12 @@ class StudentsListController: UIViewController, UITableViewDataSource, UITableVi
     var scheduleId: String = ""
     
     var reservationIds = [String]()
+    
+    var currentStudentFirstName: String = ""
+    
+    var currentStudentLastName:  String = ""
+    var studentFirstName: String = ""
+    var studentLastName:  String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,6 +54,12 @@ class StudentsListController: UIViewController, UITableViewDataSource, UITableVi
 
         
         fetchStudents()
+        saveScheduleId()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        fetchCurrentlyLoggedInStudentName()
     }
     
     
@@ -54,16 +69,45 @@ class StudentsListController: UIViewController, UITableViewDataSource, UITableVi
         // Dispose of any resources that can be recreated.
     }
     
+    func saveScheduleId(){
+        let defaults = UserDefaults.standard
+        defaults.set(self.scheduleId, forKey: "studentScheduleId")
+    }
+    
     func getReservationIds(_ allReservationIds: [String]) -> [String]{
         reservationIds = allReservationIds;
         print("reservations IDS \(reservationIds)")
         return reservationIds;
     }
     
+    func fetchCurrentlyLoggedInStudentName() {
+        
+        
+        
+        guard let uid = FIRAuth.auth()?.currentUser?.uid else{
+            return
+        }
+        
+        FIRDatabase.database().reference().child("Students").child(uid).observeSingleEvent(of: .value, with: {(snapshot: FIRDataSnapshot) in
+        
+            let dictionary = snapshot.value as! [String:AnyObject]
+            
+            if let firstName = dictionary["firstName"] as? String {
+                self.currentStudentFirstName = firstName
+                print(self.currentStudentFirstName)
+            }
+            
+            if let lastName = dictionary["lastName"] as? String {
+                self.currentStudentLastName = lastName
+                print(self.currentStudentLastName)
+            }
+            
+        })
+    }
+    
     func fetchStudents(){
         
-        var studentFirstName: String = ""
-        var studentLastName:  String = ""
+       
         var studentMajor: String = ""
         var studentProfilePicture: String = ""
         
@@ -83,11 +127,11 @@ class StudentsListController: UIViewController, UITableViewDataSource, UITableVi
                     
                     
                     if let firstName = dictionary["firstName"] as? String {
-                        studentFirstName = firstName
+                        self.studentFirstName = firstName
                     }
                     
                     if let lastName = dictionary["lastName"] as? String {
-                        studentLastName = lastName
+                        self.studentLastName = lastName
                     }
                     
                     if let major = dictionary["studentMajor"] as? String {
@@ -100,7 +144,7 @@ class StudentsListController: UIViewController, UITableViewDataSource, UITableVi
                         studentProfilePicture = profilePictureUrl
                     }
                     
-                    self.student = Student(studentFirstName: studentFirstName, studentLastName: studentLastName, studentProfilePicture: studentProfilePicture , studentMajor: studentMajor)
+                    self.student = Student(studentFirstName: self.studentFirstName, studentLastName: self.studentLastName, studentProfilePicture: studentProfilePicture , studentMajor: studentMajor)
                     
                     //                student.studentFirstName = dictionary["firstName"] as? String
                     //                student.studentLastName = dictionary["lastName"]  as? String
@@ -151,18 +195,11 @@ class StudentsListController: UIViewController, UITableViewDataSource, UITableVi
         self.activityIndicator.stopAnimating()
         self.studentTableView.isHidden=false
         
-//        if let profilePictureUrL = student.studentProfilePicture {
-//            
-//            if profilePictureUrL == "No profile picture"{
-//            cell?.studentProfilePicture.image = UIImage(named:"Profile Picture Icon-2")
-//            } else{
-//                cell?.studentProfilePicture.loadImageWithCache(urlString: profilePictureUrL)
-//                self.activityIndicator.stopAnimating()
-//                self.studentTableView.isHidden=false
-//            }
-//
-//          
-//        }
+        if currentStudentFirstName == self.studentFirstName && currentStudentLastName == self.currentStudentLastName {
+            cell?.youLabel.isHidden = false
+        } else{
+            cell?.youLabel.isHidden = true
+        }
         
         return cell!
     }

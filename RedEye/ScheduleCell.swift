@@ -13,6 +13,7 @@ import Firebase
 protocol ScheduleTableViewCellDelegate {
     func didTappedSwitch(cell: ScheduleCell)
     func didTappedViewStudentButton(cell: ScheduleCell)
+    func didTappedModifyAddress(cell: ScheduleCell)
 }
 
 class ScheduleCell: UITableViewCell {
@@ -49,14 +50,21 @@ class ScheduleCell: UITableViewCell {
     var isReserved = false
     
     
+    @IBOutlet weak var yourDestinationLabel: UILabel!
+    
+    @IBOutlet weak var addressLabel: UILabel!
+    
+    @IBOutlet weak var modifyAddressLabel: UIButton!
+    
+    @IBAction func modifyAddressBtnPressed(_ sender: Any) {
+        delegate.didTappedModifyAddress(cell: self)
+    }
+    
     @IBOutlet weak var viewStudentsBtn: UIButton!
     
     @IBAction func viewStudents(_ sender: Schedule) {
         
         delegate.didTappedViewStudentButton(cell: self)
-//        self.schedule = sender
-//        reservationList = schedule.reservationID
-//        print ("reservationList \(reservationList)")
 
     }
     
@@ -109,12 +117,26 @@ class ScheduleCell: UITableViewCell {
         shuttleCapacity.text = self.schedule.shuttleCapacity
         shuttleLicencePlate.text = self.schedule.shuttleLicencePlate
         driverProfilePictureUrl = self.schedule.driverProfilePicture
-        if driverProfilePictureUrl == "No profile picture" {
+        
+        
+        if driverProfilePictureUrl.contains("No profile Picture") {
             driverProfilePicture.image = UIImage(named:"Profile Picture Icon-2")
-        } else{
-            driverProfilePicture.loadImageWithCache(urlString: driverProfilePictureUrl)
+        } else {
+            let imageUrl = NSURL(string: driverProfilePictureUrl)
+            if imageUrl == nil {
+                driverProfilePicture.image = UIImage(named:"Profile Picture Icon-2")
+            } else {
+                let placeHolderOmage = UIImage.init(named: "Profile Picture Icon-2")
+                driverProfilePicture.sd_setImage(with: imageUrl as! URL, placeholderImage: placeHolderOmage)
+            }
             
         }
+//        if driverProfilePictureUrl == "No profile picture" {
+//            driverProfilePicture.image = UIImage(named:"Profile Picture Icon-2")
+//        } else{
+//            driverProfilePicture.loadImageWithCache(urlString: driverProfilePictureUrl)
+//            
+//        }
     }
     
     func reformatDate(_ shuttleDepartureDate : String) -> String{
@@ -148,8 +170,4 @@ class ScheduleCell: UITableViewCell {
     }
 
 
-}
-
-extension String {
-    
 }

@@ -80,7 +80,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
     }
 
     
-    var majors = ["Accountig", "Accounting - CPS", "African Studies", "African-American Studies", "Air Force ROTC", "American Sign Language"]
+    var majors = ["Accountig", "Accounting", "African Studies", "African-American Studies", "Air Force ROTC", "American Sign Language", "Analytics","Anthropology","Arabic","Architecture","Army","Art","Asian Studies","Behavioral Neuroscience","Biochemistry","Bioengineering","Bioinformatics","Biology","Biology","Biotechnology","Business","Business Administration","Business Law","Career Development","Chemistry & Chemical Biology","Chemistry","Chinese","Civil & Enviro Eng","Commerce & Economic Dev","Communication Studies","Comp Engneering Tech","Computer Science","Computer Systems Engineering","Construction Mangmnt","Criminal Justice","Culture","Data Analytics","Data Science","Deaf Studies","Design","Digital Media","Economics","Education","Energy Systems","English","Information Systems","Health Science"]
     
 
     //var majors = [Major]()
@@ -132,15 +132,16 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         activityIndicator.startAnimating()
         
         
+        
         self.fetchStudentInformation()
         self.fetchStudentAddress()
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
-        
+        let searchBarTextAttributes: [String : AnyObject] = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont.systemFont(ofSize: UIFont.systemFontSize)]
+        UITextField.appearance(whenContainedInInstancesOf:[UISearchBar.self]).defaultTextAttributes = searchBarTextAttributes
+    
     }
 
     override func didReceiveMemoryWarning() {
@@ -201,6 +202,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
                             self.profileInfoHolderView.isHidden=false
                             self.majorTextField.isHidden = false
                             self.addressTextField.isHidden = false
+                            self.addressTextField.adjustsFontSizeToFitWidth = true;
                             self.studentFirstNameLabel.isHidden = false
                             self.studentLastName.isHidden = false
                             self.profilePictureImage.isHidden = false
@@ -219,14 +221,19 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
                                     self.profileInfoHolderView.isHidden=false
                                     self.majorTextField.isHidden = false
                                    self.addressTextField.isHidden = false
+                            self.addressTextField.adjustsFontSizeToFitWidth = true;
                                 self.studentFirstNameLabel.isHidden = false
                                 self.studentLastName.isHidden = false
                                 self.profilePictureImage.isHidden = false
                                 self.studentFirstNameLabel.text = studentFirstName
                                 self.studentLastName.text = studentLastName
                                self.majorTextField.text = studentMajor
-                                    self.profilePictureImage.loadImageWithCache(urlString: url)
-                                    self.backgroundPicture.loadImageWithCache(urlString: url)
+                            let placeHolderImage = UIImage.init(named: "Profile Picture Icon-2")
+                            let imageUrl = NSURL(string: url)
+                            self.profilePictureImage.sd_setImage(with: imageUrl as! URL, placeholderImage: placeHolderImage)
+                            self.backgroundPicture.sd_setImage(with: imageUrl as! URL, placeholderImage: placeHolderImage)
+                                    //self.profilePictureImage.loadImageWithCache(urlString: url)
+                                    //self.backgroundPicture.loadImageWithCache(urlString: url)
                        
             }
         } , withCancel: nil)
@@ -249,6 +256,10 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         
     }
     
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+         return NSAttributedString(string: majors[row], attributes: [NSForegroundColorAttributeName:UIColor.gray])
+    }
+    
     func pickerView (_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int){
         
         majorTextField.text = self.majors[row]
@@ -256,6 +267,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         majorPicker.isHidden = true
         majorTextField.isHidden = false
         addressTextField.isHidden = false
+        self.addressTextField.adjustsFontSizeToFitWidth = true;
         self.saveStudentMajor()
         
     }
@@ -268,13 +280,6 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
             majorTextField.isHidden = true
             addressTextField.isHidden = true
             majorTextField.endEditing(true)
-            
-//        }else if (textField == self.addressTextField){
-//             // performSegue(withIdentifier: "goToAddressSearch", sender: self)
-//            let autocompleteController = AddressController()
-//           // autocompleteController.delegate = self
-//            self.present(autocompleteController, animated: true, completion: nil)
-//        }
         
         }
     }
@@ -326,7 +331,6 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         
             if let dictionary = snapshot.value as? [String:AnyObject]{
                   self.addressTextField.text = dictionary["studentAddress"] as? String
-
             }
          })}
     
@@ -342,19 +346,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         
         self.present(profilePicturePicker, animated: true, completion: nil)
     }
-    
-    
-//    @IBAction func addProfilePictureBtnPressed(_ sender: UIButton) {
-//        
-//        let profilePicturePicker = UIImagePickerController()
-//        profilePicturePicker.delegate = self
-//        profilePicturePicker.allowsEditing = true
-//        profilePicturePicker.sourceType = .photoLibrary
-//        
-//        self.present(profilePicturePicker, animated: true, completion: nil)
-//        
-//        
-//    }
+  
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let image = info[UIImagePickerControllerEditedImage] as? UIImage
@@ -366,7 +358,6 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         }
         let ref = FIRDatabase.database().reference(fromURL: Constants.URL.firebaseDatabase)
        
-        print("Current UID \(uid)")
         let pictureName = NSUUID().uuidString
         let storageRef = FIRStorage.storage().reference().child("profile_pictures").child("\(pictureName).png")
         if let uploadProfilePicture = UIImagePNGRepresentation(self.profilePictureImage.image!){
@@ -414,10 +405,10 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         self.dismiss(animated: true, completion: nil)
     }
     
+    
     func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace){
         self.addressTextField.text! = place.formattedAddress!
         self.studentAddress._placeID = place.placeID
-        print("Place id \(self.studentAddress.placeID)")
         self.getAddressCordinates{}
         self.saveStudentAddress()
         self.dismiss(animated: true, completion: nil)
@@ -427,7 +418,6 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
     func getAddressCordinates(completed: @escaping DownloadComplete){
         Alamofire.request("\(Constants.URL.googleGeocodingAPI)\(self.addressTextField.text!.replacingOccurrences(of: " ", with: ""))\(Constants.Google.GEOLOCATION_API_KEY )").responseJSON {
         response in
-            print("GEOLOCATION \("\(Constants.URL.googleGeocodingAPI)\(self.addressTextField.text!.replacingOccurrences(of: " ", with: ""))\(Constants.Google.GEOLOCATION_API_KEY )")")
         let result = response.result
             if let dictionary = result.value as? Dictionary <String, AnyObject>{
                 if let results = dictionary["results"] as? [Dictionary <String, AnyObject>]{
@@ -481,75 +471,8 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         })
     }
     
-    func getItineraryAPI(completed: DownloadComplete){
-        Alamofire.request("\(Constants.URL.googleMapDirectionAPI)\(Constants.Google.DESTINATION)\(" EigxNzUgUHJlc2lkZW50cyBMbiwgUXVpbmN5LCBNQSAwMjE2OSwgVVNB")\(Constants.Google.WAYPOINTS)\("ChIJaXb0bp1544kRT1twn2TEHq4")\(Constants.Google.API_KEY)").responseJSON { response in
-            print("ITINERARY URL \("\(Constants.URL.googleMapDirectionAPI)\(Constants.Google.DESTINATION)\("EigxNzUgUHJlc2lkZW50cyBMbiwgUXVpbmN5LCBNQSAwMjE2OSwgVVNB")\(Constants.Google.WAYPOINTS)\("ChIJaXb0bp1544kRT1twn2TEHq4")\(Constants.Google.API_KEY)")")
-            
-            let result = response.result
-            if let dictionary = result.value as? Dictionary<String, AnyObject>{
-                
-                if let results = dictionary["results"] as? [Dictionary<String, AnyObject>]{
-                    print ("RESULTS ITINERARY API : \(results)")
-  
-                    
-                    
-                }
-                
-            }
-            
-           
-        }
-         completed()
-    }
-
-    
-    
-    
 }
 
-//extension UIImageView {
-//    
-//    
-//    
-//    
-//    func loadImageWithCache(urlString: String) {
-//        
-//        if let cachedImage = imageCache.object(forKey: urlString as NSString) as? UIImage {
-//            self.image = cachedImage
-//            return
-//        }
-//        
-//        let url = NSURL (string: urlString)
-//        URLSession.shared.dataTask(with:url as! URL, completionHandler: {(data, response, error) in
-//            
-//            if error != nil {
-//                print("Error loading profile picture \(error?.localizedDescription)")
-//                return
-//            } else{
-//                DispatchQueue.main.async{
-//                    if let cachedImage = UIImage(data:data!){
-//                        imageCache.setObject(cachedImage, forKey: urlString as NSString)
-//                        self.image = cachedImage
-//                        
-//                    }
-//                    
-//                    
-//                    
-//                }}
-//        }).resume()
-//        
-//    }
-//}
-    
-
-//    
-//    @IBAction func logoutBtnPressed(_ sender: UIButton) {
-//        KeychainWrapper.standard.removeObject(forKey: KEY_UID)
-//        try!FIRAuth.auth()?.signOut()
-//        performSegue(withIdentifier: "goBackToSignInPage", sender: nil)
-//    }
-//    
-    
     /*
     // MARK: - Navigation
 

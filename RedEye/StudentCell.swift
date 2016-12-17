@@ -22,6 +22,9 @@ class StudentCell: UITableViewCell {
     
     var profilePictureUrl : String!
     
+    
+    @IBOutlet weak var youLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         studentProfilePicture.layer.cornerRadius = studentProfilePicture.frame.size.height/2
@@ -47,23 +50,19 @@ class StudentCell: UITableViewCell {
        
         
         studentFirstName.text = self.student.studentFirstName
-        print("studentFirstName.text \(studentFirstName.text)")
         studentLastName.text = self.student.studentLastName
-        print("studentLastName.text \(studentLastName.text)")
         studentMajor.text = self.student.studentMajor
-        print("studentMajor.text  \(studentMajor.text )")
         profilePictureUrl = self.student.studentProfilePicture
-        print("profilePictureUrl \(profilePictureUrl)")
         
-        if profilePictureUrl.contains("Profile Picture") {
+        if profilePictureUrl.contains("No profile Picture") {
             studentProfilePicture.image = UIImage(named:"Profile Picture Icon-2")
         } else {
             let imageUrl = NSURL(string: profilePictureUrl)
             if imageUrl == nil {
                 studentProfilePicture.image = UIImage(named:"Profile Picture Icon-2")
             } else {
-                let placeHolderOmage = UIImage.init(named: "Profile Picture Icon-2")
-                studentProfilePicture.sd_setImage(with: imageUrl as! URL, placeholderImage: placeHolderOmage)
+                let placeHolderImage = UIImage.init(named: "Profile Picture Icon-2")
+                studentProfilePicture.sd_setImage(with: imageUrl as! URL, placeholderImage: placeHolderImage)
             }
             
         }

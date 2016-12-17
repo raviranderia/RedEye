@@ -9,30 +9,61 @@
 import UIKit
 import Firebase
 
-class DriverScheduleController: UIViewController , UITableViewDelegate, UITableViewDataSource{
+class DriverScheduleController: UIViewController , UITableViewDelegate, UITableViewDataSource, DriverScheduleTableViewCellDelegate{
 
     @IBOutlet weak var driverScheduleTableView: UITableView!
     
     var driverSchedule = [Schedule]()
     var schedule = Schedule()
     var driverUid: String!
+    var scheduleIds = [String]()
     var driverEmployementId: String!
     
-    var alertController: UIAlertController!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+        
+        super.viewWillAppear(true)
+        
 
-        alertController = UIAlertController(title: "Taking off", message:"Confirm you're about to depart", preferredStyle: UIAlertControllerStyle.actionSheet)
-        
-        driverScheduleTableView.delegate = self
-        driverScheduleTableView.dataSource = self
-        
-        self.navigationController?.navigationBar.topItem?.title = "schedule"
+        self.title = "schedule"
         self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Georgia", size: 34)!, NSForegroundColorAttributeName: Constants.Colors.redColor]
         
+        
         getDriverEmployementId()
-        fetchDriverSchedule()
+        
+        
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        
+        
+        DispatchQueue.main.async{
+            self.driverScheduleTableView.reloadData()
+        }
+    }
+    
+    func updateTableView() -> Void {
+        
+        self.driverSchedule.removeAll()
+        
+        getDriverEmployementId()
+ 
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        
+        
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -50,16 +81,31 @@ class DriverScheduleController: UIViewController , UITableViewDelegate, UITableV
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: "driverScheduleCell", for: indexPath) as? DriverScheduleCell
+        var cell = tableView.dequeueReusableCell(withIdentifier: "driverScheduleCell") as? DriverScheduleCell
         
         if cell == nil {
             cell = DriverScheduleCell.init(style: .default, reuseIdentifier: "driverScheduleCell")
             
         }
         
-        let schedule = driverSchedule[indexPath.row]
+        var schedule : Schedule!
+        schedule = driverSchedule[indexPath.row]
+        
+        
+        
+        cell?.delegate = self
 
-        cell?.updateDriverSchedule(schedule)
+       cell?.updateDriverSchedule(schedule)
+        
+
+    
+        cell?.aboutToLeaveBtn.titleLabel?.adjustsFontSizeToFitWidth = true
+        
+        print("\(schedule.scheduleActive)")
+        cell?.aboutToLeaveBtn.titleLabel?.text =  (schedule.scheduleActive! == "YES") ? "About to leave" : "Cancel departure"
+
+
+        cell?.viewStudentsBtn.isHidden = !(Int(schedule.numSeatReserved)!>0)
         cell?.aboutToLeaveBtn.tag = indexPath.row
         let idSelectedSchedule = cell?.aboutToLeaveBtn.tag
         
@@ -84,6 +130,7 @@ class DriverScheduleController: UIViewController , UITableViewDelegate, UITableV
                 if let driverId = dictionary["driverID"] as? String {
                     self.driverEmployementId = driverId
                     print("driver emplyement id \(self.driverEmployementId)")
+                    self.fetchDriverSchedule();
                 }
             }
             
@@ -96,7 +143,8 @@ class DriverScheduleController: UIViewController , UITableViewDelegate, UITableV
         var shuttleDepartureDate = ""
         var shuttleDepartureTime = ""
         var numSeatAvailable = ""
-        
+        var numberSeatReserved = ""
+        var scheduleIsActive = ""
         
         FIRDatabase.database().reference().child("Schedule").observe(.childAdded, with: { (snapshot) in
             if let dictionary = snapshot.value as? [String : AnyObject] {
@@ -116,28 +164,174 @@ class DriverScheduleController: UIViewController , UITableViewDelegate, UITableV
                     
                 }
 
-                if let driverID = dictionary["driverID"] as? String{
-                   driverId = driverID
-                    print("driver id \(driverId)")
-                }
                 
-                self.schedule = Schedule(id: key, shuttleDepartureDate: shuttleDepartureDate, shuttleDepartureTime:shuttleDepartureTime, numSeatLeft: numSeatAvailable)
-                
-                if driverId == self.driverEmployementId {
-                    self.driverSchedule.append(self.schedule)
-                    print("driver schedule \(self.driverSchedule)")
+                if let numSeatReserved = dictionary["numSeatsReserved"] as? String {
+                    numberSeatReserved = numSeatReserved
                     
                 }
                 
-                DispatchQueue.main.async{
-                    self.driverScheduleTableView.reloadData()
+                if let scheduleActive = dictionary["scheduleActive"] as? String {
+                    scheduleIsActive = scheduleActive
+                    
                 }
+                
+                if let driverID = dictionary["driverID"] as? String{
+                   driverId = driverID
+                }
+                
+                self.schedule = Schedule(id: key, shuttleDepartureDate: shuttleDepartureDate, shuttleDepartureTime:shuttleDepartureTime, numSeatLeft: numSeatAvailable, numSeatReserved: numberSeatReserved, scheduleActive: scheduleIsActive)
+                
+                if driverId == self.driverEmployementId {
+                    
+                    if !self.scheduleIds.contains(key) {
+                        self.scheduleIds.append(key)
+                        self.driverSchedule.append(self.schedule)
+//                        DispatchQueue.main.async{
+//                            self.driverScheduleTableView.reloadData()
+//                        }
+                    }
+                   
+                    
+                }
+                
+                
+                
                 
             }
             
         }, withCancel: nil )
         
         
+    }
+    
+    func didTappedViewStudentButton(cell: DriverScheduleCell) {
+        
+        let indexPath = self.driverScheduleTableView.indexPath(for: cell)
+        let schedule = driverSchedule[(indexPath?.row)!]
+        print("schedule tapped \(schedule.id)")
+        
+        
+        let studentsVC: StudentsListController = self.storyboard?.instantiateViewController(withIdentifier: "studentsVC") as! StudentsListController
+        
+        studentsVC.scheduleId = schedule.id
+        
+        self.navigationController?.pushViewController(studentsVC, animated: true)
+    }
+    
+    func didTappedAboutToLeaveButton(cell: DriverScheduleCell) {
+        
+        var alertController: UIAlertController!
+        
+        let indexPath = self.driverScheduleTableView.indexPath(for: cell)
+        let schedule = driverSchedule[(indexPath?.row)!]
+        
+        if(cell.aboutToLeaveBtn.titleLabel?.text == "Cancel departure"){
+            
+            alertController = UIAlertController(title: "Not ready to leave", message:"If you confirm that you're not about to depart anymore, students will be able to reserve a seat.", preferredStyle: UIAlertControllerStyle.actionSheet)
+            
+            let cancelDeparture = UIAlertAction(title: "Cancel departure", style: UIAlertActionStyle.default) { (action) in
+                
+                let scheduleReference = Constants.URL.ref.child("Schedule").child(schedule.id)
+                let updateScheduleValues = ["scheduleActive": "YES"]
+                scheduleReference.updateChildValues(updateScheduleValues, withCompletionBlock: { (error, ref) in
+                    if error != nil {
+                        print ("Error setting schedule as unactive in the database: \(error?.localizedDescription)")
+                        return
+                    } else{
+                        let controller = UIAlertController(title: "Departure cancelled", message: " Students can now reserve for the shuttle leaving on \(schedule.shuttleDepartureDate!) at \(schedule.shuttleDepartureTime!).", preferredStyle: .alert)
+                        let scheduleDeleted = UIAlertAction(title: "Okay", style: .default)
+                        controller.addAction(scheduleDeleted)
+                        self.present(controller, animated: true, completion: nil)
+                        DispatchQueue.main.async {
+                            self.updateTableView()
+                        }
+                        
+                    }
+                })
+                
+                let reservationReference = Constants.URL.ref.child("Schedule").child(schedule.id).child("Reservations")
+                reservationReference.observe(.childAdded, with: { (snapshot) in
+                    
+                    
+                    let studentReference = Constants.URL.ref.child("Students").child(snapshot.key)
+                    print(snapshot.key)
+                    let updateReservationValuesForStudents = ["hasReservation": "YES"]
+                    studentReference.updateChildValues(updateReservationValuesForStudents, withCompletionBlock: { (error, ref) in
+                        if error != nil {
+                            print("Error occured while trying to update values for hasReservation for students")
+                        } else{
+                            print("Successfully updated values for hasReservation for students")
+                        }
+                    })
+                    
+                })
+            }
+            let confirmDeparture = UIAlertAction(title: "Confirm departure", style: UIAlertActionStyle.default) { (action) in
+            return
+            }
+            
+                
+                alertController.addAction(cancelDeparture)
+                alertController.addAction(confirmDeparture)
+                
+                self.present(alertController, animated: true, completion: nil)
+            
+        } else{
+            alertController = UIAlertController(title: "Taking off", message:"If you confirm that you're about to depart, students won't be able to reserve a seat anymore.", preferredStyle: UIAlertControllerStyle.actionSheet)
+            
+            let removeSchedule = UIAlertAction(title: "Yes, confirm departure", style: UIAlertActionStyle.default) { (action) in
+                
+                let scheduleReference = Constants.URL.ref.child("Schedule").child(schedule.id)
+                let updateScheduleValues = ["scheduleActive": "NO"]
+                scheduleReference.updateChildValues(updateScheduleValues, withCompletionBlock: { (error, ref) in
+                    if error != nil {
+                        print ("Error setting schedule as unactive in the database: \(error?.localizedDescription)")
+                        return
+                    } else{
+                        let controller = UIAlertController(title: "Departure saved", message: " Shuttle for departure on \(schedule.shuttleDepartureDate!) at \(schedule.shuttleDepartureTime!) cannot be reserved by students anymore.", preferredStyle: .alert)
+                        let scheduleDeleted = UIAlertAction(title: "Okay", style: .default)
+                        controller.addAction(scheduleDeleted)
+                        self.present(controller, animated: true, completion: nil)
+                        
+                    }
+                })
+                
+                let reservationReference = Constants.URL.ref.child("Schedule").child(schedule.id).child("Reservations")
+                reservationReference.observe(.childAdded, with: { (snapshot) in
+                    
+                    
+                    let studentReference = Constants.URL.ref.child("Students").child(snapshot.key)
+                    print(snapshot.key)
+                    let updateReservationValuesForStudents = ["hasReservation": "NO"]
+                    studentReference.updateChildValues(updateReservationValuesForStudents, withCompletionBlock: { (error, ref) in
+                        if error != nil {
+                            print("Error occured while trying to update values for hasReservation for students")
+                        } else{
+                            print("Successfully updated values for hasReservation for students")
+                        }
+                    })
+                    
+                })
+                
+                DispatchQueue.main.async {
+                    self.updateTableView()
+                    //self.schedule.cancelled = true
+                }
+            }
+            
+            let cancelRemoveSchedule = UIAlertAction(title: "No, I'm not ready yet", style: UIAlertActionStyle.default) { (action) in
+                return
+            }
+            
+            alertController.addAction(removeSchedule)
+            alertController.addAction(cancelRemoveSchedule)
+            
+            
+            
+            self.present(alertController, animated: true, completion: nil)
+        }
+    
+      
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

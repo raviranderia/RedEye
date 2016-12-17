@@ -9,6 +9,11 @@
 import UIKit
 import Firebase
 
+protocol DriverScheduleTableViewCellDelegate {
+    func didTappedAboutToLeaveButton(cell: DriverScheduleCell)
+     func didTappedViewStudentButton(cell: DriverScheduleCell)
+}
+
 class DriverScheduleCell: UITableViewCell {
     
     
@@ -18,28 +23,33 @@ class DriverScheduleCell: UITableViewCell {
     
     @IBOutlet weak var numSeatsLeft: UILabel!
     
+    @IBOutlet weak var viewStudentsBtn: UIButton!
+    
+    
+    
+    @IBAction func viewStudents(_ sender: Schedule) {
+        delegate.didTappedViewStudentButton(cell: self)
+    }
+    
     @IBOutlet weak var aboutToLeaveBtn: LoginButton!
     var schedule : Schedule!
     
+    var delegate : DriverScheduleTableViewCellDelegate!
     
-    @IBAction func aboutToLeaveBtnPressed(_ sender: UIButton) {
+    
+    @IBAction func aboutToLeaveBtnPressed(_ sender: Any) {
         
-        let defaults = UserDefaults.standard
-        let scheduleId = defaults.string(forKey: "\(sender.tag)")
-        print("schedule id \(scheduleId)")
-        
-        let scheduleReference = Constants.URL.ref.child("Schedule").child(scheduleId!)
-        let updateScheduleValues = ["scheduleActive": "NO"]
-        scheduleReference.updateChildValues(updateScheduleValues, withCompletionBlock: { (error, ref) in
-            if error != nil {
-                print ("Error saving major in database: \(error?.localizedDescription)")
-                return
-            } else{
-                
-            }
-        })
+    delegate.didTappedAboutToLeaveButton(cell: self)
+     
     }
     
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -58,6 +68,7 @@ class DriverScheduleCell: UITableViewCell {
         departureDate.text = reformatDate(self.schedule.shuttleDepartureDate!)
         departureTime.text = self.schedule.shuttleDepartureTime
         numSeatsLeft.text = self.schedule.shuttleCapacity
+    
         
     }
     

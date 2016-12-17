@@ -84,6 +84,7 @@ class DriverProfileController: UIViewController, UIImagePickerControllerDelegate
         var driverLastName:  String = ""
         var driverProfilePicture: String = ""
         
+        
         FIRDatabase.database().reference().child("Drivers").child(driverUid).observeSingleEvent(of: .value, with: {(snapshot: FIRDataSnapshot) in
             
             if let dictionary = snapshot.value as? [String:AnyObject]{
@@ -127,8 +128,12 @@ class DriverProfileController: UIViewController, UIImagePickerControllerDelegate
                     self.driverProfilePicture.isHidden = false
                     self.driverFirstName.text = driverFirstName
                     self.driverLastName.text = driverLastName
-                    self.driverProfilePicture.loadImageWithCache(urlString: url)
-                    self.backgroundProfilePicture.loadImageWithCache(urlString: url)
+//                    self.driverProfilePicture.loadImageWithCache(urlString: url)
+//                    self.backgroundProfilePicture.loadImageWithCache(urlString: url)
+                    let imageUrl = NSURL(string: url)
+                    let placeHolderImage = UIImage.init(named: "Profile Picture Icon-2")
+                    self.driverProfilePicture.sd_setImage(with: imageUrl as! URL, placeholderImage: placeHolderImage)
+                    self.backgroundProfilePicture.sd_setImage(with: imageUrl as! URL, placeholderImage: placeHolderImage)
                     
                 }
 

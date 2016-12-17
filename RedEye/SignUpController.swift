@@ -55,10 +55,18 @@ class SignUpController: UIViewController {
         
         if self.lastNameField.text == "" || self.huskyEmailField.text == "" || self.passwordField.text == "" || self.firstNameField.text == "" {
             
-            let alertControllerSignUp = UIAlertController (title : "Oops, you were too fast", message: "Please make sure to fill in every field.", preferredStyle: .alert)
+            let alertControllerSignUp = UIAlertController (title : "Oops, you were too fast", message: "Please, make sure to fill in every field.", preferredStyle: .alert)
             let actionSignUp = UIAlertAction (title: "OK", style: . cancel, handler : nil)
             alertControllerSignUp.addAction(actionSignUp)
             self.present(alertControllerSignUp, animated: true, completion: nil)
+            
+            
+        } else if !(self.huskyEmailField.text?.contains("husky.neu.edu"))!{
+            let alertControllerSignUp = UIAlertController (title : "Husky email address requiered", message: "Please, enter your husky email address.", preferredStyle: .alert)
+            let verifyHuskyEmailAddress = UIAlertAction (title: "OK", style: . cancel, handler : nil)
+            alertControllerSignUp.addAction(verifyHuskyEmailAddress)
+            self.present(alertControllerSignUp, animated: true, completion: nil)
+            
             
         } else{
             
@@ -152,6 +160,7 @@ class SignUpController: UIViewController {
             self.checkEmailView.alpha = 1
             self.checkEmailView.transform = CGAffineTransform.identity
         }
+
     }
     
     func animateOut(){

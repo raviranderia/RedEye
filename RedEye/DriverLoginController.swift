@@ -27,12 +27,31 @@ class DriverLoginController: UIViewController {
     
     var emailAddress: String = ""
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        getAllDriversEmailAddresses()
+        
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        if (FIRAuth.auth()?.currentUser?.uid) != nil{
+            
+            var appDelegate: AppDelegate
+            appDelegate = UIApplication.shared.delegate as! AppDelegate
+            
+            appDelegate.window?.rootViewController
+                = self.storyboard?.instantiateViewController(withIdentifier: "driverTabBarController")
+            
+            
+        }
+        
          hideKeyboardWhenTappedView()
 
         
-    getAllDriversEmailAddresses()
+        
    
         
     }
@@ -52,7 +71,15 @@ class DriverLoginController: UIViewController {
         
         
         
-    FIRDatabase.database().reference().child("Drivers").observe(.childAdded, with: { (snapshot) in
+    
+    }
+    
+    func checkDriverByEmail(driverEmail: String) {
+        
+        
+        
+        FIRDatabase.database().reference().child("Drivers").observe(.childAdded, with: { (snapshot) in
+            
             print("snapshot \(snapshot)")
             if let dictionary = snapshot.value as? [String : AnyObject] {
                 
@@ -68,9 +95,26 @@ class DriverLoginController: UIViewController {
                 
             }
             
+            if self.driverEmailAddressList.contains(driverEmail) {
+                
+                self.driverUid = self.driverEmailAddressAndUniqueId["\(driverEmail)"]
+                
+                self.performSegue(withIdentifier: "goToDriverProfile", sender: nil)
+                
+            } else {
+                
+                let alertControllerVerificationEmail = UIAlertController (title : "Email address unknown", message: "You need to enter your driver information" , preferredStyle: .alert)
+                let actionVerification = UIAlertAction (title: "OK", style: . cancel, handler : nil)
+                alertControllerVerificationEmail.addAction(actionVerification)
+                self.present(alertControllerVerificationEmail, animated: true, completion: nil)
+                
+                try? FIRAuth.auth()?.signOut()
+            }
+            
         } , withCancel: nil)
+        
+        
     }
-    
     
     @IBAction func driverLoginBtnPressed(_ sender: Any) {
         if self.driverEmailAddressField.text == "" || self.driverPasswordField.text == "" {
@@ -79,45 +123,42 @@ class DriverLoginController: UIViewController {
             let actionSignUp = UIAlertAction (title: "OK", style: . cancel, handler : nil)
             alertControllerLogin.addAction(actionSignUp)
             self.present(alertControllerLogin, animated: true, completion: nil)
-        }else{
-        
-            FIRAuth.auth()?.createUser(withEmail: self.driverEmailAddressField.text!, password: self.driverPasswordField.text!, completion: {(user, error) in
-                if error == nil{
-                    if self.driverEmailAddressList.contains(self.driverEmailAddressField.text!){
-                    print("email address found")
-             self.driverUid = self.driverEmailAddressAndUniqueId["\(self.driverEmailAddressField.text!)"]
-                        let ref = FIRDatabase.database().reference(fromURL: Constants.URL.firebaseDatabase)
-                      let driverReference = ref.child("Drivers").child(self.driverUid!)
-                        
-                        let values = ["profilePictureUrl": "No profile picture"]
-                        driverReference.updateChildValues(values, withCompletionBlock: { (errorDatabase, ref) in
-                            if errorDatabase != nil {
-                                print ("Error saving data in database: \(errorDatabase?.localizedDescription)")
-                                return
-                            } else{
-                                print ("Successefully saved driver")
+            
+        } else{
+            
+            FIRAuth.auth()?.signIn(withEmail: driverEmailAddressField.text!, password: driverPasswordField.text!, completion: { (user, error) in
+                
+                if error != nil {
+                    
+                    // create
+                    
+                    print("********** \(error?.localizedDescription)")
+                    if (error?.localizedDescription.contains("invalid"))! {
+                        FIRAuth.auth()?.createUser(withEmail: self.driverEmailAddressField.text!, password: self.driverPasswordField.text!, completion: {(user, error) in
+                            if error == nil{
+                                
+                                self.performSegue(withIdentifier: "goToDriverProfile", sender: nil)
+                            } else {
+                                // error
                             }
                         })
-                            self.login()
-                   
-                    
-                    } else{
-                        let alertControllerVerificationEmail = UIAlertController (title : "Email address unknown", message: "You need to enter your driver information" , preferredStyle: .alert)
-                                                let actionVerification = UIAlertAction (title: "OK", style: . cancel, handler : nil)
-                                                alertControllerVerificationEmail.addAction(actionVerification)
-                                                self.present(alertControllerVerificationEmail, animated: true, completion: nil)
-
+                    } else {
+                        print("********** \(error?.localizedDescription)")
                     }
                     
-                }else if (error != nil){
-                
-                    self.login()
+                } else {
                     
+                    // logged in
+                    
+                    let currentDriver = FIRAuth.auth()?.currentUser
+                    self.checkDriverByEmail(driverEmail: (currentDriver?.email)!)
+
                 }
             })
+            
         }
 
-        }
+    }
     
     
     func login(){
@@ -172,9 +213,7 @@ class DriverLoginController: UIViewController {
             let tabBarController = segue.destination as! UITabBarController
             let navController = tabBarController.viewControllers![0] as! UINavigationController
             let destinationVC = navController.topViewController as! DriverProfileController
-//            print(self.driverUid!)
             destinationVC.driverUid = self.driverUid!
-            print("\(destinationVC.driverUid)")
           
         }
     }
