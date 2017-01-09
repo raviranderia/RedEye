@@ -74,7 +74,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
             appDelegate = UIApplication.shared.delegate as! AppDelegate
             
             appDelegate.window?.rootViewController
-                = self.storyboard?.instantiateViewController(withIdentifier: "switchVC")
+                = self.storyboard?.instantiateViewController(withIdentifier: "driverOrStudentVC")
       
         }
     }

@@ -67,7 +67,7 @@ class DriverScheduleCell: UITableViewCell {
          self.schedule = schedule
         departureDate.text = reformatDate(self.schedule.shuttleDepartureDate!)
         departureTime.text = self.schedule.shuttleDepartureTime
-        numSeatsLeft.text = self.schedule.shuttleCapacity
+        numSeatsLeft.text = self.schedule.numSeatReserved
     
         
     }

@@ -69,7 +69,7 @@ class LoginController: UIViewController {
         }else{
             FIRAuth.auth()?.signIn(withEmail: self.emailField.text!, password: self.passwordField.text!, completion: {(user, error) in
                 if error == nil{
-                   // if (user?.isEmailVerified)! {
+                   //if (user?.isEmailVerified)! {
                         print("Email verified")
                       self.performSegue(withIdentifier: "goToProfile", sender: nil)
                         print ("Succefully logged in \(self.emailField.text)")

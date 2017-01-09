@@ -36,17 +36,17 @@ class DriverLoginController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        if (FIRAuth.auth()?.currentUser?.uid) != nil{
-            
-            var appDelegate: AppDelegate
-            appDelegate = UIApplication.shared.delegate as! AppDelegate
-            
-            appDelegate.window?.rootViewController
-                = self.storyboard?.instantiateViewController(withIdentifier: "driverTabBarController")
-            
-            
-        }
+//        
+//        if (FIRAuth.auth()?.currentUser?.uid) != nil{
+//            
+//            var appDelegate: AppDelegate
+//            appDelegate = UIApplication.shared.delegate as! AppDelegate
+//            
+//            appDelegate.window?.rootViewController
+//                = self.storyboard?.instantiateViewController(withIdentifier: "driverTabBarController")
+//            
+//            
+//        }
         
          hideKeyboardWhenTappedView()
 
@@ -132,7 +132,10 @@ class DriverLoginController: UIViewController {
                     
                     // create
                     
-                    print("********** \(error?.localizedDescription)")
+                    let alertControllerSignUp = UIAlertController (title : "Come on, you know this!", message: "The password you entered doesn't match the one we have in record." , preferredStyle: .alert)
+                    let actionSignUp = UIAlertAction (title: "OK", style: . cancel, handler : nil)
+                    alertControllerSignUp.addAction(actionSignUp)
+                    self.present(alertControllerSignUp, animated: true, completion: nil)
                     if (error?.localizedDescription.contains("invalid"))! {
                         FIRAuth.auth()?.createUser(withEmail: self.driverEmailAddressField.text!, password: self.driverPasswordField.text!, completion: {(user, error) in
                             if error == nil{
@@ -143,7 +146,10 @@ class DriverLoginController: UIViewController {
                             }
                         })
                     } else {
-                        print("********** \(error?.localizedDescription)")
+                        let alertControllerVerificationEmail = UIAlertController (title : "Email address unknown", message: "You need to enter your driver information" , preferredStyle: .alert)
+                        let actionVerification = UIAlertAction (title: "OK", style: . cancel, handler : nil)
+                        alertControllerVerificationEmail.addAction(actionVerification)
+                        self.present(alertControllerVerificationEmail, animated: true, completion: nil)
                     }
                     
                 } else {

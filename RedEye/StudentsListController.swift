@@ -59,7 +59,7 @@ class StudentsListController: UIViewController, UITableViewDataSource, UITableVi
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        fetchCurrentlyLoggedInStudentName()
+        //fetchCurrentlyLoggedInStudentName()
     }
     
     
@@ -80,30 +80,30 @@ class StudentsListController: UIViewController, UITableViewDataSource, UITableVi
         return reservationIds;
     }
     
-    func fetchCurrentlyLoggedInStudentName() {
-        
-        
-        
-        guard let uid = FIRAuth.auth()?.currentUser?.uid else{
-            return
-        }
-        
-        FIRDatabase.database().reference().child("Students").child(uid).observeSingleEvent(of: .value, with: {(snapshot: FIRDataSnapshot) in
-        
-            let dictionary = snapshot.value as! [String:AnyObject]
-            
-            if let firstName = dictionary["firstName"] as? String {
-                self.currentStudentFirstName = firstName
-                print(self.currentStudentFirstName)
-            }
-            
-            if let lastName = dictionary["lastName"] as? String {
-                self.currentStudentLastName = lastName
-                print(self.currentStudentLastName)
-            }
-            
-        })
-    }
+//    func fetchCurrentlyLoggedInStudentName() {
+//        
+//        
+//        
+//        guard let uid = FIRAuth.auth()?.currentUser?.uid else{
+//            return
+//        }
+//        
+//        FIRDatabase.database().reference().child("Students").child(uid).observeSingleEvent(of: .value, with: {(snapshot: FIRDataSnapshot) in
+//        
+//            let dictionary = snapshot.value as! [String:AnyObject]
+//            
+//            if let firstName = dictionary["firstName"] as? String {
+//                self.currentStudentFirstName = firstName
+//                print(self.currentStudentFirstName)
+//            }
+//            
+//            if let lastName = dictionary["lastName"] as? String {
+//                self.currentStudentLastName = lastName
+//                print(self.currentStudentLastName)
+//            }
+//            
+//        })
+//    }
     
     func fetchStudents(){
         
@@ -195,11 +195,11 @@ class StudentsListController: UIViewController, UITableViewDataSource, UITableVi
         self.activityIndicator.stopAnimating()
         self.studentTableView.isHidden=false
         
-        if currentStudentFirstName == self.studentFirstName && currentStudentLastName == self.currentStudentLastName {
-            cell?.youLabel.isHidden = false
-        } else{
-            cell?.youLabel.isHidden = true
-        }
+//        if currentStudentFirstName == cell?.studentFirstName.text && currentStudentLastName == cell?.studentLastName.text {
+//            cell?.youLabel.isHidden = false
+//        } else{
+//            cell?.youLabel.isHidden = true
+//        }
         
         return cell!
     }

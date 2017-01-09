@@ -73,7 +73,7 @@ class DriverProfileController: UIViewController, UIImagePickerControllerDelegate
             appDelegate = UIApplication.shared.delegate as! AppDelegate
             
             appDelegate.window?.rootViewController
-                = self.storyboard?.instantiateViewController(withIdentifier: "driverLogin")
+                = self.storyboard?.instantiateViewController(withIdentifier: "driverOrStudentVC")
             
         }
     }

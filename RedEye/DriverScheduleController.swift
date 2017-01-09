@@ -18,6 +18,7 @@ class DriverScheduleController: UIViewController , UITableViewDelegate, UITableV
     var driverUid: String!
     var scheduleIds = [String]()
     var driverEmployementId: String!
+     var refreshControl = UIRefreshControl()
     
     
     override func viewWillAppear(_ animated: Bool) {
@@ -31,25 +32,29 @@ class DriverScheduleController: UIViewController , UITableViewDelegate, UITableV
         
         getDriverEmployementId()
         
+        self.refreshControl.addTarget(self, action: #selector(ScheduleController.updateTableView), for: .valueChanged)
         
         
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        
-        
-        DispatchQueue.main.async{
-            self.driverScheduleTableView.reloadData()
+        if #available(iOS 10.0, *) {
+            
+            self.driverScheduleTableView.refreshControl = refreshControl
+            self.driverScheduleTableView.layoutIfNeeded()
+            
+        } else {
+            self.driverScheduleTableView.addSubview(refreshControl)
         }
+
+   
+        
+        
     }
     
     func updateTableView() -> Void {
         
         self.driverSchedule.removeAll()
         
-        getDriverEmployementId()
+         self.fetchDriverSchedule();
+         self.refreshControl.endRefreshing()
  
     }
     
@@ -101,9 +106,14 @@ class DriverScheduleController: UIViewController , UITableViewDelegate, UITableV
     
         cell?.aboutToLeaveBtn.titleLabel?.adjustsFontSizeToFitWidth = true
         
-        print("\(schedule.scheduleActive)")
-        cell?.aboutToLeaveBtn.titleLabel?.text =  (schedule.scheduleActive! == "YES") ? "About to leave" : "Cancel departure"
-
+        
+        if (schedule.scheduleActive == "YES") {
+            cell?.aboutToLeaveBtn.titleLabel?.text = "About to leave"
+        } else{
+            cell?.aboutToLeaveBtn.titleLabel?.text = "Cancel departure"
+        }
+        //cell?.aboutToLeaveBtn.titleLabel?.text =  (schedule.scheduleActive! == "YES") ? "About to leave" : "Cancel departure"
+        print("\(cell?.aboutToLeaveBtn.titleLabel?.text)")
 
         cell?.viewStudentsBtn.isHidden = !(Int(schedule.numSeatReserved)!>0)
         cell?.aboutToLeaveBtn.tag = indexPath.row
@@ -172,6 +182,7 @@ class DriverScheduleController: UIViewController , UITableViewDelegate, UITableV
                 
                 if let scheduleActive = dictionary["scheduleActive"] as? String {
                     scheduleIsActive = scheduleActive
+                    print(scheduleIsActive)
                     
                 }
                 
@@ -186,9 +197,9 @@ class DriverScheduleController: UIViewController , UITableViewDelegate, UITableV
                     if !self.scheduleIds.contains(key) {
                         self.scheduleIds.append(key)
                         self.driverSchedule.append(self.schedule)
-//                        DispatchQueue.main.async{
-//                            self.driverScheduleTableView.reloadData()
-//                        }
+                        DispatchQueue.main.async{
+                            self.driverScheduleTableView.reloadData()
+                        }
                     }
                    
                     
@@ -242,9 +253,9 @@ class DriverScheduleController: UIViewController , UITableViewDelegate, UITableV
                         let scheduleDeleted = UIAlertAction(title: "Okay", style: .default)
                         controller.addAction(scheduleDeleted)
                         self.present(controller, animated: true, completion: nil)
-                        DispatchQueue.main.async {
-                            self.updateTableView()
-                        }
+//                        DispatchQueue.main.async {
+//                            self.updateTableView()
+//                        }
                         
                     }
                 })
@@ -292,9 +303,16 @@ class DriverScheduleController: UIViewController , UITableViewDelegate, UITableV
                         let scheduleDeleted = UIAlertAction(title: "Okay", style: .default)
                         controller.addAction(scheduleDeleted)
                         self.present(controller, animated: true, completion: nil)
-                        
+//                         DispatchQueue.main.async {
+//                   cell.aboutToLeaveBtn.titleLabel?.text = "Cancel departure"
+////                        //self.updateTableView()
+//                        }
                     }
                 })
+//                                DispatchQueue.main.async {
+//                                    cell.aboutToLeaveBtn.titleLabel?.text = "Cancel departure"
+//                                    //self.updateTableView()
+//                                }
                 
                 let reservationReference = Constants.URL.ref.child("Schedule").child(schedule.id).child("Reservations")
                 reservationReference.observe(.childAdded, with: { (snapshot) in
@@ -314,8 +332,9 @@ class DriverScheduleController: UIViewController , UITableViewDelegate, UITableV
                 })
                 
                 DispatchQueue.main.async {
-                    self.updateTableView()
-                    //self.schedule.cancelled = true
+                    cell.aboutToLeaveBtn.titleLabel?.text = "Cancel departure"
+                    //self.updateTableView()
+                    return
                 }
             }
             
