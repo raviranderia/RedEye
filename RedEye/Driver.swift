@@ -8,18 +8,24 @@
 
 import UIKit
 
+// Would try to make this a struct...since struct is a data type and that makes swift processing easier. Also you probably dont have to write init function as a struct will automatically do that for you.
 class Driver: NSObject {
     
-    var driverFirstName: String?
-    var driverLastName: String?
-    var driverEmailAddress: String?
-    var driverProfilePicture: String?
+    private let driverFirstName: String?
+    private let driverLastName: String?
+    private let driverEmailAddress: String?
+    private let driverProfilePicture: String?
+    
+    init(driverFirstName: String, driverLastName: String, driverProfilePicture: String , driverEmailAddress: String) {
+        self.driverFirstName = driverFirstName
+        self.driverLastName = driverLastName
+        self.driverEmailAddress = driverEmailAddress
+        self.driverProfilePicture = driverProfilePicture
+    }
     
     var _driverFirstName: String{
-        if driverFirstName == nil{
-            driverFirstName = ""
-        }
-        return driverFirstName!
+        guard let driverFirstName = driverFirstName else { return "" }
+        return driverFirstName
     }
     
     var _driverLastName: String{
@@ -47,12 +53,7 @@ class Driver: NSObject {
         
     }
     
-    init(driverFirstName: String, driverLastName: String, driverProfilePicture: String , driverEmailAddress: String) {
-        self.driverFirstName = driverFirstName
-        self.driverLastName = driverLastName
-        self.driverEmailAddress = driverEmailAddress
-        self.driverProfilePicture = driverProfilePicture
-    }
+
 
 
 }
